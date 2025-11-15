@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "ic_gm_critical_mission.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

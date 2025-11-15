@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "ic_gm_daily_bonus.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

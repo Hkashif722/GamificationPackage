@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "ic_gm_capture.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
