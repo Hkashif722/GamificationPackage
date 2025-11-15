@@ -6,3 +6,14 @@
 //
 
 import Foundation
+
+internal struct APIConst {
+    
+    static let courseBaseUrl = "/api";
+    static let versionAPI = "v1";
+    static let GetRanking = "User/GetRanking"
+    static let GetAllHouseMaster = "user/GetAllHouseMaster";
+    static let GamificationLevel = "GamificationLevel"
+    static let GamificationMissionCount = "Gamification/MissionCounts"
+    static let GetHouseRewardPointCount = "GetHouseRewardPointCount"
+}

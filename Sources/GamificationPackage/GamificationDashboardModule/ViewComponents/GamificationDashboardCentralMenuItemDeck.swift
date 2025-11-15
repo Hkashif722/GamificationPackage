@@ -15,61 +15,9 @@
 
 import SwiftUI
 
-struct GamificationDashboardCentralMenuItemDeck: View {
+internal struct GamificationDashboardCentralMenuItemDeck: View {
     
-    struct MenuTrayActionButtons: Identifiable {
-        
-        enum ActionType {
-            case happyLearningHour
-            case criticalMission
-            case leaderboard
-            case mission
-            case dailyLoginBonus
-            case campaigns
-            case campaignLeaderboard
-            
-            var getImageAssestName: String {
-                switch self {
-                  
-                case .happyLearningHour:
-                    return "ic_gm_happy_Hour"
-                case .criticalMission:
-                    return "ic_gm_critical_mission"
-                case .leaderboard:
-                    return "ic_gm_leaderboard"
-                case .mission:
-                    return "ic_gm_mission"
-                case .dailyLoginBonus:
-                    return "ic_gm_daily_bonus"
-                case .campaigns:
-                    return "ic_gm_campign"
-                case .campaignLeaderboard:
-                    return "ic_gm_camping_leaderboard"
-                }
-            }
-        }
-        
-        let id: UUID = UUID()
-        let actionType: ActionType
-        
-        init(actionType: ActionType) {
-            self.actionType = actionType
-        }
-        
-        static var getActionMenuModel: [Self] {
-            [
-                .init(actionType: .happyLearningHour),
-                .init(actionType: .criticalMission),
-                .init(actionType: .leaderboard),
-                .init(actionType: .mission),
-                .init(actionType: .dailyLoginBonus),
-                .init(actionType: .campaigns),
-                .init(actionType: .campaignLeaderboard)
-            ]
-        }
-    }
-    
-    let onAction: ((_ type: MenuTrayActionButtons.ActionType) -> ())
+    let onAction: ((_ type: GamificationDashboardDataModel.MenuTrayActionButtons.ActionType) -> ())
     
     var body: some View {
         
@@ -86,7 +34,7 @@ struct GamificationDashboardCentralMenuItemDeck: View {
     
     
     private var centerDeckMenuTrayBackground: some View {
-        Image("gm_center_deck_menu_bg")
+        Image("gm_center_deck_menu_bg", bundle: .module)
             .resizable()
             .scaledToFill()
             .frame(width: 260, height: 260)
@@ -104,7 +52,7 @@ struct GamificationDashboardCentralMenuItemDeck: View {
             tiltFactor: 0.9,
             isAnimate: true
         ) {
-            ForEach(MenuTrayActionButtons.getActionMenuModel) { action in
+            ForEach(GamificationDashboardDataModel.MenuTrayActionButtons.getActionMenuModel) { action in
                 
                 SwiftUIUtility.RoundMenuButton(
                     image: .asset(name: action.actionType.getImageAssestName),

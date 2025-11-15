@@ -22,7 +22,7 @@ struct GamificationHouseChartDataModel {
         var value: Double { Double(score) }
         var color: Color? { barColor }
         
-        static var houses: [HouseScoreModel] = [
+        static let houses: [HouseScoreModel] = [
             HouseScoreModel(name: "Red House",    score: 48200, barColor: .red),
             HouseScoreModel(name: "Green House",  score: 59200, barColor: .green),
             HouseScoreModel(name: "Blue House",   score: 25200, barColor: .blue),

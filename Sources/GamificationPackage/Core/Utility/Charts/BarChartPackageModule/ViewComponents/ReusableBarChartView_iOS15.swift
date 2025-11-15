@@ -9,7 +9,7 @@
 import SwiftUI
 
 // MARK: - Reusable Bar Chart Component
-struct ReusableBarChartView_iOS15<T: BarChartDataPointProtocol>: View {
+internal struct ReusableBarChartView_iOS15<T: BarChartDataPointProtocol>: View {
     let data: [T]
     let configuration: BarChartDataModel.BarChartConfiguration
     

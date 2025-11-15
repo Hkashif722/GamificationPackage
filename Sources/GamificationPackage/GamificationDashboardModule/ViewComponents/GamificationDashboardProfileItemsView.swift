@@ -15,7 +15,7 @@
 
 import SwiftUI
 
-struct GamificationDashboardProfileItemsView: View {
+internal struct GamificationDashboardProfileItemsView: View {
     
     var body: some View {
         
@@ -34,12 +34,13 @@ struct GamificationDashboardProfileItemsView: View {
     }
     
     private var profileImageView: some View {
-        Image("managerEvalActiveIcon")
-            .resizable()
-            .frame(width: 80, height: 80)
-            .clipShape(Circle())
-            .overlay(Circle().stroke(.white, lineWidth: 5))
-            .zIndex(2)
+        SwiftUIUtility.ProfileImageView(
+            imageUrl: URL(string: ""),
+            size: 82,
+            profileBorderColor: .white,
+            borderWidth: 5
+        )
+        .zIndex(2)
     }
     
     
@@ -56,7 +57,7 @@ struct GamificationDashboardProfileItemsView: View {
     private var welcomeTextMessageView: some View {
         Text("WELCOME")
             .appFont(.poppinsRegular, size: 12)
-            .foregroundStyle(Color(.label))
+            .foregroundStyle(ColorUtility.label)
             .padding(.init(top: 5, leading: 45, bottom: 5, trailing: 15))
             .background(.white)
             .clipShape(Capsule())
@@ -69,7 +70,7 @@ struct GamificationDashboardProfileItemsView: View {
             .appFont(.poppinsBold, size: 12, weight: .bold)
             .foregroundStyle(.white)
             .padding(.init(top: 8, leading: 55, bottom: 8, trailing: 25))
-            .background(BrandingColorStyle.primaryColor)
+            .background(ColorUtility.primaryColor)
             .clipShape(Capsule())
     }
     
@@ -77,7 +78,7 @@ struct GamificationDashboardProfileItemsView: View {
     private var houseNameTextView: some View {
         Text("Red House")
             .appFont(.poppinsRegular, size: 12)
-            .foregroundStyle(Color(.label))
+            .foregroundStyle(ColorUtility.label)
             .padding(.init(top: 5, leading: 45, bottom: 5, trailing: 15))
             .background(.white)
             .clipShape(Capsule())
@@ -86,5 +87,9 @@ struct GamificationDashboardProfileItemsView: View {
 }
 
 #Preview {
-    GamificationDashboardProfileItemsView()
+    ZStack {
+        GamificationDashboardBackgroundView()
+            .blur(radius: 3)
+        GamificationDashboardProfileItemsView()
+    }
 }

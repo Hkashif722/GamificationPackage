@@ -7,60 +7,84 @@
 //
 
 import Foundation
+import NetworkService
 
-//MARK: Leaderboard API REQUEST AND RESPONE MODEL
-struct GamificationDashboardDataModel {
+// MARK: - ROOT MODEL
+internal struct GamificationDashboardDataModel {
     
-    struct LeaderboardRequestModel: RequestURN {
+    
+    
+    struct MenuTrayActionButtons: Identifiable {
         
-        struct LeaderboardPayloadRequestModel: Encodable {
+        enum ActionType {
+            case happyLearningHour
+            case criticalMission
+            case leaderboard
+            case mission
+            case dailyLoginBonus
+            case campaigns
+            case campaignLeaderboard
+            
+            var getImageAssestName: String {
+                switch self {
+                  
+                case .happyLearningHour:
+                    return "ic_gm_happy_Hour"
+                case .criticalMission:
+                    return "ic_gm_critical_mission"
+                case .leaderboard:
+                    return "ic_gm_leaderboard"
+                case .mission:
+                    return "ic_gm_mission"
+                case .dailyLoginBonus:
+                    return "ic_gm_daily_bonus"
+                case .campaigns:
+                    return "ic_gm_campign"
+                case .campaignLeaderboard:
+                    return "ic_gm_camping_leaderboard"
+                }
+            }
+        }
+        
+        let id: UUID = UUID()
+        let actionType: ActionType
+        
+        init(actionType: ActionType) {
+            self.actionType = actionType
+        }
+        
+        static var getActionMenuModel: [Self] {
+            [
+                .init(actionType: .happyLearningHour),
+                .init(actionType: .criticalMission),
+                .init(actionType: .leaderboard),
+                .init(actionType: .mission),
+                .init(actionType: .dailyLoginBonus),
+                .init(actionType: .campaigns),
+                .init(actionType: .campaignLeaderboard)
+            ]
+        }
+    }
+    
+
+    // MARK: - PAYLOAD MODELS
+    struct LeaderboardRequestModel {
+        struct LeaderboardPayloadRequestModel: Codable {
             let configuredColumnName: String
             let configuredColumnValue: String
             let houseCode: String?
             let ranks: Int
-            
-            init(configuredColumnName: String ,configuredColumnValue: String, houseCode: String?, ranks: Int) {
-                self.configuredColumnName = configuredColumnName
-                self.configuredColumnValue = configuredColumnValue
-                self.houseCode = houseCode
-                self.ranks = ranks
-            }
         }
-        
-        func getPlayload(
-            configuredColumnName: String = "undefined",
-            configuredColumnValue: String = "" ,
-            houseCode: String? = nil,
-            ranks: Int = 100
-        ) -> [String: AnyObject]? {
-            
-            let payload = LeaderboardPayloadRequestModel(
-                configuredColumnName: configuredColumnName,
-                configuredColumnValue: configuredColumnValue ,
-                houseCode: houseCode,
-                ranks: ranks
-            )
-            
-            return payload.toDictionary()
-        }
-        
-        var url: String {
-            return  [APIConst.baseURL+APIConst.courseBaseUrl, APIConst.versionAPI,APIConst.GetRanking].joinWithPathSeparator()
-        }
-        
     }
-    
-    
-    
+
+    // MARK: - RESPONSE MODELS
     struct LeaderBoardResponseModel {
         
-        // MARK: - RankingResponse
         struct RankingResponse: Codable {
             let topRanking: [Ranking]
             let myRanking: [Ranking]?
         }
         
-        // MARK: - Ranking
         struct Ranking: Codable, Identifiable {
             let id: UUID = UUID()
             let userId: Int
@@ -79,48 +103,13 @@ struct GamificationDashboardDataModel {
             let country: String?
             let createdDate: String
             
-            // Computed properties (not part of Codable)
-            
             var fullProfilePath: URL? {
-                //                return getResourcePath(self.profilePicture)
-                return ResourceUtils.getResourceURLPath(profilePicture)
-            }
-            
-            // Explicit CodingKeys (optional in this case)
-            enum CodingKeys: String, CodingKey {
-                case userId
-                case euSerId
-                case userName
-                case totalPoint
-                case profilePicture
-                case gender
-                case rank
-                case level
-                case maximumLevelPoint
-                case levelCode
-                case houseCode
-                case houseName
-                case eId
-                case country
-                case createdDate
+//                ResourceUtils.getResourceURLPath(profilePicture)
+                return nil
             }
         }
-        
-        
     }
-}
 
-
-//MARK: House Master API REQUEST AND RESPONE MODEL
-extension GamificationDashboardDataModel {
-    
-    struct GETALLHouseMasterRequestModel: RequestURN {
-        
-        var url: String {
-            return  [APIConst.baseURL+APIConst.courseBaseUrl, APIConst.versionAPI,APIConst.GetAllHouseMaster].joinWithPathSeparator()
-        }
-    }
-    
     struct GETALLHouseMasterResponseModel: Codable, Identifiable {
         let id: Int
         let code: String
@@ -128,25 +117,6 @@ extension GamificationDashboardDataModel {
         let createdDate: Date
         let isDeleted: Int
         let logoName: String
-        
-        enum CodingKeys: String, CodingKey {
-            case id
-            case code
-            case name
-            case createdDate
-            case isDeleted
-            case logoName
-        }
-    }
-}
-
-//MARK: Gamification Level API REQUEST AND RESPONE MODEL
-extension GamificationDashboardDataModel {
-    
-    struct GamificationLevelRequestModel: RequestURN {
-        var url: String {
-            return  [APIConst.baseURL+APIConst.courseBaseUrl, APIConst.versionAPI,APIConst.GamificationLevel].joinWithPathSeparator()
-        }
     }
     
     struct GamificationLevelResponseModel: Codable, Identifiable {
@@ -155,19 +125,7 @@ extension GamificationDashboardDataModel {
         let minPoint: Int
         let maxPoint: Int
     }
-    
-}
 
-
-//MARK: Gamification MISSION COUNT API REQUEST AND RESPONE MODEL
-extension GamificationDashboardDataModel {
-    
-    struct GamificationMissionRequestModel: RequestURN {
-        var url: String {
-            return  [APIConst.baseURL+APIConst.courseBaseUrl, APIConst.versionAPI,APIConst.GamificationMissionCount].joinWithPathSeparator()
-        }
-    }
-    
     struct GamificationMissionResponseModel: Codable {
         let totalMiniMission: Int
         let totalBossMission: Int
@@ -177,24 +135,98 @@ extension GamificationDashboardDataModel {
         let completedNormalMission: Int
     }
     
-    
-}
-
-
-//MARK: Gamification REWARD POINT API REQUEST AND RESPONE MODEL
-extension GamificationDashboardDataModel {
-    
-    struct GetHouseRewardPointCountRequestModel: RequestURN {
-        var url: String {
-            return  [APIConst.baseURL+APIConst.courseBaseUrl, APIConst.versionAPI,APIConst.GamificationMissionCount].joinWithPathSeparator()
-        }
-    }
-    
     struct HouseRewardPointCountResponseModel: Codable {
         let red: Int
         let green: Int
         let blue: Int
         let yellow: Int
     }
-    
 }
+
+// ============================================================
+// MARK: - ENDPOINT ENUM (ALL INSIDE THE MODEL)
+// ============================================================
+
+internal extension GamificationDashboardDataModel {
+    
+    enum Endpoint: EndpointModel {
+        
+        case leaderboard(payload: LeaderboardRequestModel.LeaderboardPayloadRequestModel)
+        case houseMasterList
+        case levelList
+        case missionCount
+        case rewardPointCount
+        
+        // MARK: - PATH
+        var path: String {
+            switch self {
+                
+            case .leaderboard:
+                return [
+                    APIConst.courseBaseUrl,
+                    APIConst.versionAPI,
+                    APIConst.GetRanking
+                ].joined(separator: "/")
+                
+            case .houseMasterList:
+                return [
+                    APIConst.courseBaseUrl,
+                    APIConst.versionAPI,
+                    APIConst.GetAllHouseMaster
+                ].joined(separator: "/")
+                
+            case .levelList:
+                return [
+                    APIConst.courseBaseUrl,
+                    APIConst.versionAPI,
+                    APIConst.GamificationLevel
+                ].joined(separator: "/")
+                
+            case .missionCount:
+                return [
+                    APIConst.courseBaseUrl,
+                    APIConst.versionAPI,
+                    APIConst.GamificationMissionCount
+                ].joined(separator: "/")
+                
+            case .rewardPointCount:
+                return [
+                    APIConst.courseBaseUrl,
+                    APIConst.versionAPI,
+                    APIConst.GamificationMissionCount // confirm if correct
+                ].joined(separator: "/")
+            }
+        }
+        
+        // MARK: - METHOD
+        var method: HTTPMethod {
+            switch self {
+            case .leaderboard:
+                return .post
+            default:
+                return .get
+            }
+        }
+        
+        // MARK: - HEADERS
+        var headers: [String: String]? {
+            switch self {
+            case .leaderboard:
+                return ["Content-Type": "application/json"]
+            default:
+                return nil
+            }
+        }
+        
+        // MARK: - BODY FOR POST ONLY
+        var body: Codable? {
+            switch self {
+            case .leaderboard(let payload):
+                return payload
+            default:
+                return nil
+            }
+        }
+    }
+}
+

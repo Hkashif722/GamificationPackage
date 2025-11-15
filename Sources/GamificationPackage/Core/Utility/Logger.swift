@@ -16,14 +16,14 @@
 
 import Foundation
 
-enum LogLevel: String {
+internal enum LogLevel: String {
     case info = "ℹ️ INFO"
     case debug = "🐛 DEBUG"
     case warning = "⚠️ WARNING"
     case error = "❌ ERROR"
 }
 
-class Logger {
+internal struct Logger {
     static let shared = Logger()
 
     private let queue = DispatchQueue(label: "com.logger.queue", qos: .utility)
@@ -133,7 +133,7 @@ class Logger {
 
 }
 
-extension Date {
+internal extension Date {
     func formatted(_ format: String) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = format

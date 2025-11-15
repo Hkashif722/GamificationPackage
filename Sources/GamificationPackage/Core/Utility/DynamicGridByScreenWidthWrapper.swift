@@ -12,7 +12,7 @@ import SwiftUI
 ///
 /// This view takes a collection of items and a content closure to render each item in a responsive grid.
 /// The grid layout adjusts dynamically to fit as many items as possible in a row while respecting the minimum width.
-struct DynamicGridByScreenWidthWrapper<T: RandomAccessCollection, Content: View>: View where T.Element: Hashable {
+internal struct DynamicGridByScreenWidthWrapper<T: RandomAccessCollection, Content: View>: View where T.Element: Hashable {
     
     // MARK: - Properties
     

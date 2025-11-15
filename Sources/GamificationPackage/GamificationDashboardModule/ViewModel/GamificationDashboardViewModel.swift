@@ -7,66 +7,114 @@
 //
 
 import Foundation
-import SwiftfulRouting
-import Combine
+import NetworkService
 
-
-class GamificationDashboardViewModel: RoutableViewModel {
- 
-    @Published var myRankingResponseModel: GamificationDashboardDataModel.LeaderBoardResponseModel.Ranking?
+@MainActor
+class GamificationDashboardViewModel: BaseRoutableNavModel {
     
+    @Published var myRankingResponseModel: GamificationDashboardDataModel.LeaderBoardResponseModel.Ranking?
     @Published var topRankingResponseModel: [GamificationDashboardDataModel.LeaderBoardResponseModel.Ranking]?
     
-    init(router: AnyRouter) {
+    @Published var houseMasters: [GamificationDashboardDataModel.GETALLHouseMasterResponseModel] = []
+    @Published var gamificationLevels: [GamificationDashboardDataModel.GamificationLevelResponseModel] = []
+    @Published var missionCount: GamificationDashboardDataModel.GamificationMissionResponseModel?
+    @Published var rewardPoints: GamificationDashboardDataModel.HouseRewardPointCountResponseModel?
+    
+    override init(router: Router) {
         super.init(router: router)
     }
-    
 }
 
-//MARK: API CALLS FOR LEADERBOARD
+
 extension GamificationDashboardViewModel {
     
-    private func getRanking() {
-        
-        let model = GamificationDashboardDataModel.LeaderboardRequestModel()
-        guard let payload = GamificationDashboardDataModel.LeaderboardRequestModel().getPlayload() else {
-            self.manageAlert(msg: "Something went wrong.")
-            Logger.shared.log(.error, message: "Error occured, while creating request playload for leaderboard response.")
-            return
-        }
-        
-        ApiService.shared.requestPostHeader(type: GamificationDashboardDataModel.LeaderBoardResponseModel.RankingResponse.self, model: model, payload: payload)
-            .handleAPICall(with: self) { [weak self] responseData in
-                guard let self = self else { return }
-                self.handleRankingResponse(responseData)
+    func getRanking() {
+        Task { [weak self] in
+            guard let self else { return }
+            
+            let payload = GamificationDashboardDataModel.LeaderboardRequestModel.LeaderboardPayloadRequestModel(
+                configuredColumnName: "undefined",
+                configuredColumnValue: "",
+                houseCode: nil,
+                ranks: 100
+            )
+            
+            do {
+                let endpoint = GamificationDashboardDataModel.Endpoint.leaderboard(payload: payload)
+                
+                let response = try await ApiService.shared.requestPostHeader(
+                    type: GamificationDashboardDataModel.LeaderBoardResponseModel.RankingResponse.self,
+                    model: endpoint,
+                    payload: payload
+                )
+                
+                await MainActor.run { self.handleRankingResponse(response) }
+                
+            } catch {
+                Logger.shared.log(.error, message: "Leaderboard API failed: \(error)")
+//                self.manageAlert(msg: "Unable to fetch leaderboard.")
             }
-            .store(in: &cancellables)
+        }
     }
     
-    private func handleRankingResponse(_ responseData: GamificationDashboardDataModel.LeaderBoardResponseModel.RankingResponse) {
-        if let myRankData = responseData.myRanking?.first {
-            UserDefaultsManager.shared.saveTotalRewardPoints(myRankData.totalPoint)
-            self.myRankingResponseModel = myRankData
+    private func handleRankingResponse(_ response: GamificationDashboardDataModel.LeaderBoardResponseModel.RankingResponse) {
+        if let myRank = response.myRanking?.first {
+            self.myRankingResponseModel = myRank
         } else {
             self.myRankingResponseModel = nil
         }
-        self.topRankingResponseModel = responseData.topRanking
         
+        self.topRankingResponseModel = response.topRanking
     }
-    
 }
 
 
-//MARK: API CALLS FOR LEADERBOARD
 extension GamificationDashboardViewModel {
     
-    private func getAllHouseMaster() {
-        let model = GamificationDashboardDataModel.GETALLHouseMasterRequestModel()
-        /*
-        Task { [weak self]
+    func getAllHouseMaster() {
+        Task { [weak self] in
+            guard let self else { return }
             
+            let endpoint = GamificationDashboardDataModel.Endpoint.houseMasterList
+            
+            do {
+                let response = try await ApiService.shared.requestGetHeader(
+                    type: [GamificationDashboardDataModel.GETALLHouseMasterResponseModel].self,
+                    model: endpoint
+                )
+                
+                await MainActor.run { self.houseMasters = response }
+                
+            } catch {
+                Logger.shared.log(.error, message: "House Master API failed: \(error)")
+//                self.manageAlert(msg: "Unable to fetch house masters.")
+            }
         }
-         */
     }
-    
 }
+
+
+extension GamificationDashboardViewModel {
+    
+    func getMissionCount() {
+        Task { [weak self] in
+            guard let self else { return }
+            
+            let endpoint = GamificationDashboardDataModel.Endpoint.missionCount
+            
+            do {
+                let response = try await ApiService.shared.requestGetHeader(
+                    type: GamificationDashboardDataModel.GamificationMissionResponseModel.self,
+                    model: endpoint
+                )
+                
+                await MainActor.run { self.missionCount = response }
+                
+            } catch {
+                Logger.shared.log(.error, message: "Mission Count API failed: \(error)")
+//                self.manageAlert(msg: "Unable to fetch mission count.")
+            }
+        }
+    }
+}
+

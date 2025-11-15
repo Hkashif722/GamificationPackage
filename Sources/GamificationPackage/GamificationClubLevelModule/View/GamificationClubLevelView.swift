@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct GamificationClubLevelView: View {
+internal struct GamificationClubLevelView: View {
     
     let shadowColor: Color = Color(hex: "#FF00B4")
     

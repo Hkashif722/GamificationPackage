@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct GamificationDashboardBackgroundView: View {
+internal struct GamificationDashboardBackgroundView: View {
     
     var body: some View {
         ZStack {
@@ -18,7 +18,7 @@ struct GamificationDashboardBackgroundView: View {
     
     private var gamificationBackgroundImage: some View {
         SwiftUIUtility.BackgroundImageView(
-            imageName: "gm_Knight Club_bg",
+            imageName: "gm_Knight_Club_bg",
             contentMode: .fill
         )
     }

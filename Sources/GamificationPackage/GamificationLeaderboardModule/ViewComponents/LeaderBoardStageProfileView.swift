@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct LeaderBoardStageProfileView: View {
+internal struct LeaderBoardStageProfileView: View {
     
     var body: some View {
         
@@ -122,7 +122,7 @@ struct LeaderBoardStageProfileView: View {
     
     
     private var crownView: some View {
-        Image("gm_leader_crown")
+        Image("gm_leader_crown", bundle: .module)
             .resizable()
             .scaledToFit()
             .frame(width: 30, height: 30)
@@ -131,7 +131,7 @@ struct LeaderBoardStageProfileView: View {
     
     
     private func rankBadgeView(rank: String, size: CGFloat = 30) -> some View {
-        Image("gm_leaderboard_rank_badge")
+        Image("gm_leaderboard_rank_badge", bundle: .module)
             .resizable()
             .scaledToFit()
             .frame(width: size, height: size)

@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct BarChartDataModel {
+internal struct BarChartDataModel {
 
     
     

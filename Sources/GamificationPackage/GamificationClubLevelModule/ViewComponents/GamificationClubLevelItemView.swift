@@ -59,7 +59,7 @@ struct GamificationClubLevelItemView: View {
             .topLeading()
     }
     private var clubBGGradentBGView: some View {
-        Image(clubType.getGamificationClubLevelStickerBackground)
+        Image(clubType.getGamificationClubLevelStickerBackground, bundle: .module)
             .resizable()
             .scaledToFill()
             .frame(width: 120, height: 140)
@@ -68,7 +68,7 @@ struct GamificationClubLevelItemView: View {
     
     
     private var clanStickerView: some View {
-        Image(clubType.getGamificationClublevelSticker)
+        Image(clubType.getGamificationClublevelSticker, bundle: .module)
             .resizable()
             .scaledToFit()
             .frame(width: 85, height: 85)
@@ -100,7 +100,7 @@ struct GamificationClubLevelItemView: View {
         
         Button(action: {}) {
             
-            Image("gm_view_club_btn_bg")
+            Image("gm_view_club_btn_bg", bundle: .module)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 80)
@@ -118,7 +118,7 @@ struct GamificationClubLevelItemView: View {
             ZStack {
                 Color.black.opacity(0.4)
                 
-                Image("gm_ic_lock")
+                Image("gm_ic_lock", bundle: .module)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 45, height: 40)

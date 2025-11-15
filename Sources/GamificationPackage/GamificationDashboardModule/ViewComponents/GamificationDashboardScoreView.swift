@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct GamificationDashboardScoreView: View {
+internal struct GamificationDashboardScoreView: View {
     
     var body: some View {
         
@@ -24,7 +24,7 @@ struct GamificationDashboardScoreView: View {
     
     
     private var scoreBackGroundView: some View {
-        Image("gm_db_points_bg")
+        Image("gm_db_points_bg", bundle: .module)
             .resizable()
             .scaledToFit()
             .frame(width: 200)

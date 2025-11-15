@@ -9,7 +9,7 @@
 import SwiftUI
 
 // MARK: - Default button type (must be a TYPE, not a function)
-struct CardStackingDefaultButtonView: View {
+internal struct CardStackingDefaultButtonView: View {
     let system: String
     var body: some View {
         Circle()

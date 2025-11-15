@@ -14,7 +14,7 @@
 
 import SwiftUI
 
-struct GamificationDashboardClubClanInfoView: View {
+internal struct GamificationDashboardClubClanInfoView: View {
     
     var body: some View {
         Group {
@@ -25,7 +25,7 @@ struct GamificationDashboardClubClanInfoView: View {
     }
     
     private var clubInfoBannerImageView: some View {
-        Image("clan_knight_club")
+        Image("clan_knight_club", bundle: .module)
             .resizable()
             .frame(width: 150, height: 180)
             .topLeading()
@@ -43,7 +43,7 @@ struct GamificationDashboardClubClanInfoView: View {
         .top()
     }
     private var clanClubNameBackhroundView: some View {
-        Image("clan_club_bg")
+        Image("clan_club_bg", bundle: .module)
             .resizable()
             .frame(width: 250, height: 45)
     }

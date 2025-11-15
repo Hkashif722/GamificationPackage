@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct GamificationCriticalMissionSeeAllButtonView: View {
+internal struct GamificationCriticalMissionSeeAllButtonView: View {
     
     var body: some View {
         seeAllButtonView

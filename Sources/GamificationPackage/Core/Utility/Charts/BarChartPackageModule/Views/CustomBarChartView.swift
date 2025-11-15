@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct CustomBarChartView<T: BarChartDataPointProtocol>: View {
+internal struct CustomBarChartView<T: BarChartDataPointProtocol>: View {
     let data: [T]
     let configuration: BarChartDataModel.BarChartConfiguration
     

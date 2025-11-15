@@ -9,7 +9,7 @@
 
 import SwiftUI
 
-protocol BarChartDataPointProtocol {
+internal protocol BarChartDataPointProtocol {
     var label: String { get }
     var value: Double { get }
     var color: Color? { get }

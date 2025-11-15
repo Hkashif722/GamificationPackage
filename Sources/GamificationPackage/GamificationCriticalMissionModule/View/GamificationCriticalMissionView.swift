@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct GamificationCriticalMissionView: View {
+internal struct GamificationCriticalMissionView: View {
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
@@ -41,7 +41,7 @@ struct GamificationCriticalMissionView: View {
     
     private var closeButtonView: some View {
         Button(action: { }) {
-            Image("ic_gm_close")
+            Image("ic_gm_close", bundle: .module)
                 .frame(width: 45, height: 45)
         }
         .padding()

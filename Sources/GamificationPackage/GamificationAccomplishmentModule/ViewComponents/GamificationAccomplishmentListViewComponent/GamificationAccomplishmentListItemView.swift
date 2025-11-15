@@ -23,7 +23,7 @@ struct GamificationAccomplishmentListItemView: View {
     
     
     private var starIconView: some View {
-        Image("gm_accomplishment_star_icon")
+        Image("gm_accomplishment_star_icon", bundle: .module)
             .resizable()
             .scaledToFit()
             .frame(width: 45, height: 45)

@@ -8,9 +8,10 @@
 
 
 import SwiftUI
+import CoreText
 
 internal extension Font {
-    enum Custom: String {
+    enum Custom: String, CaseIterable {
         // MARK: - Quantico
         case quanticoRegular = "Quantico-Regular"
         case quanticoBold = "Quantico-Bold"
@@ -43,5 +44,35 @@ internal extension View {
     /// Applies a custom app font with optional weight.
     func appFont(_ font: Font.Custom, size: CGFloat, weight: Font.Weight? = nil) -> some View {
         self.font(.custom(font.rawValue, size: size).weight(weight ?? .regular))
+    }
+}
+
+
+internal enum FontRegistrar {
+    static func registerAllFonts() {
+        Font.Custom.allCases.forEach { fontCase in
+            register(fontName: fontCase.rawValue)
+        }
+    }
+
+    private static func register(fontName: String) {
+        let bundle = Bundle.module
+
+        let url = bundle.url(forResource: fontName, withExtension: "ttf")
+            ?? bundle.url(forResource: fontName, withExtension: "otf")
+
+        guard let url else {
+            print("⚠️ Font not found: \(fontName)")
+            return
+        }
+
+        guard let dataProvider = CGDataProvider(url: url as CFURL),
+              let font = CGFont(dataProvider)
+        else {
+            print("⚠️ Unable to load font data: \(fontName)")
+            return
+        }
+
+        CTFontManagerRegisterGraphicsFont(font, nil)
     }
 }

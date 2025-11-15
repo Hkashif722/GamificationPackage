@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct CarouselStackingView<Item: Identifiable, CardContent: View, PrevButton: View, NextButton: View>: View {
+internal struct CarouselStackingView<Item: Identifiable, CardContent: View, PrevButton: View, NextButton: View>: View {
     
     let items: [Item]
     @Binding var index: Int

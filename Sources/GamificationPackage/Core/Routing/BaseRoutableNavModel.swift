@@ -20,7 +20,7 @@ class BaseRoutableNavModel: ObservableObject {
 
     // Forward router operations
     @MainActor
-    func presentPopup(_ route: PopupRoute) {
+    func presentPopup(_ route: Route) {
         router.presentPopup(route)
     }
 

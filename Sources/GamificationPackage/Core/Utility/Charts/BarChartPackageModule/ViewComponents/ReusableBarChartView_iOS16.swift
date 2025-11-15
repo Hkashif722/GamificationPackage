@@ -12,7 +12,7 @@ import Charts
 
 // MARK: - Modular Bar Chart View
 @available(iOS 16, *)
-struct ReusableBarChartView_iOS16<T: BarChartDataPointProtocol>: View {
+internal struct ReusableBarChartView_iOS16<T: BarChartDataPointProtocol>: View {
     
     let data: [T]
     let configuration: BarChartDataModel.BarChartConfiguration

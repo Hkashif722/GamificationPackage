@@ -38,7 +38,7 @@ struct GamificationCampaignView: View {
     
     private var closeButtonView: some View {
         Button(action: { }) {
-            Image("ic_gm_close")
+            Image("ic_gm_close", bundle: .module)
                 .frame(width: 45, height: 45)
         }
         .padding()

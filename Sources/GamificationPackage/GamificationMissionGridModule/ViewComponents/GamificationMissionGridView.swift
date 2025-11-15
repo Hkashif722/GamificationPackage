@@ -1,5 +1,5 @@
 //
-//  SwiftUIView.swift
+//  GamificationMissionGridView.swift
 //  GamificationPackage
 //
 //  Created by Kashif Hussain on 14/11/25.
@@ -7,12 +7,40 @@
 
 import SwiftUI
 
-struct SwiftUIView: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+struct GamificationMissionGridView: View {
+    
+    struct ExampleCard: Identifiable, Hashable {
+        let id = UUID()
+        let title: String
+        let color: Color
     }
+    
+    let data = [
+        ExampleCard(title: "Mini Missions", color: .purple),
+        ExampleCard(title: "Gamification", color: .blue),
+        ExampleCard(title: "Web Dev", color: .indigo),
+        ExampleCard(title: "Backend API", color: .cyan)
+    ]
+    
+    
+    var body: some View {
+        
+        DynamicGridByScreenWidthWrapper(
+            items: data,
+            minimumWidth: 300,
+            
+        ) { item in
+            GamificationMissionGridItemView(onClick: {})
+        }
+    }
+    
 }
 
 #Preview {
-    SwiftUIView()
+    ZStack {
+        GamificationDashboardBackgroundView()
+            .blur(radius: 4)
+        GamificationMissionGridView()
+    }
 }
+

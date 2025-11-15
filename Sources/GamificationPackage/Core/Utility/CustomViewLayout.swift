@@ -1,5 +1,13 @@
 //
 //  CustomViewLayout.swift
+//  GamificationPackage
+//
+//  Created by Kashif Hussain on 14/11/25.
+//
+
+
+//
+//  CustomViewLayout.swift
 //  Ujjivan
 //
 //  Created by Kashif Hussain on 31/10/25.
@@ -8,7 +16,7 @@
 
 import SwiftUI
 
-struct CustomViewLayout {
+internal struct CustomViewLayout {
 
     // MARK: - Arc Layout (iOS 16+)
     @available(iOS 16.0, *)

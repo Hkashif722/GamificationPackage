@@ -24,6 +24,7 @@ struct GamificationMissionGridItemView: View {
             RoundedRectangle(cornerRadius: 20)
                 .stroke(.white, lineWidth: 2)
         }
+        .minimumScaleFactor(0.2)
     }
     
     
@@ -63,7 +64,7 @@ struct GamificationMissionGridItemView: View {
             isSystemImage: false,
             textColor: .white
         )
-        .frame(width: 120)
+//        .frame(width: 120)
         .padding(.init(top: 2, leading: 8, bottom: 2, trailing: 8))
         .reusableGradientBackground(
             stops: [
@@ -79,7 +80,7 @@ struct GamificationMissionGridItemView: View {
     private var rewardPointsInfoView: some View {
         Text("You will get 10 reward points")
             .appFont(.poppinsMedium, size: 12, weight: .medium)
-            .foregroundStyle(BrandingColorStyle.deepYellow)
+            .foregroundStyle(ColorUtility.deepYellow)
     }
     
     private var launchButtonView: some View {
@@ -96,11 +97,11 @@ struct GamificationMissionGridItemView: View {
             foregroundColor: .white,
             
             borderColor: Color(hex: "#06C2C4"),
-            height: 35,
+            height: 30,
             font: .callout,
             action: onClick
         )
-        .frame(width: 90)
+        .frame(width: 70)
     }
     
     private var backgroundFrostView: some View {

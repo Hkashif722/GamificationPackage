@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct GamificationLeaderboardTitleView: View {
+internal struct GamificationLeaderboardTitleView: View {
     
     
     var body: some View {

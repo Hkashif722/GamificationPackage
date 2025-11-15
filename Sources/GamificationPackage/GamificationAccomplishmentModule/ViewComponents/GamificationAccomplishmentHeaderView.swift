@@ -49,7 +49,8 @@ struct GamificationAccomplishmentHeaderView: View {
     //MARK: Club Sticker View
     private var clubStikerView: some View {
         Image(
-            GamificationClubTypeDataModel.ClubType.knight.getGamificationClublevelSticker
+            GamificationClubTypeDataModel.ClubType.knight.getGamificationClublevelSticker,
+            bundle: .module
         )
         .resizable()
         .scaledToFit()
@@ -74,7 +75,7 @@ struct GamificationAccomplishmentHeaderView: View {
     private var pointsView: some View {
         Text("7999")
             .appFont(.poppinsSemiBold, size: 14, weight: .semibold)
-            .foregroundStyle(BrandingColorStyle.deepBlue)
+            .foregroundStyle(ColorUtility.deepBlue)
             .padding(.horizontal, 16)
             .padding(.vertical, 8)
             .reusableGradientBackground(
