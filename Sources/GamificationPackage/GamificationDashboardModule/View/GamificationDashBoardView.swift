@@ -12,6 +12,15 @@ struct GamificationDashBoardView: View {
     
     @ObservedObject var router: Router
     
+    @StateObject var gmDashBoardViewModel: GamificationDashboardViewModel
+    
+    init(router: Router) {
+        self.router = router
+        _gmDashBoardViewModel = StateObject(
+            wrappedValue: GamificationDashboardViewModel(router: router)
+        )
+    }
+    
     var body: some View {
         ZStack {
             
@@ -48,6 +57,9 @@ struct GamificationDashBoardView: View {
             })
         }
         .fullSize()
+        .task {
+            await gmDashBoardViewModel.allApiCall()
+        }
     }
     
     // Popup Renderer

@@ -25,10 +25,13 @@ internal struct GamificationDashboardClubClanInfoView: View {
     }
     
     private var clubInfoBannerImageView: some View {
-        Image("clan_knight_club", bundle: .module)
-            .resizable()
-            .frame(width: 150, height: 180)
-            .topLeading()
+        Image(
+            GamificationClubTypeDataModel.shared.clubType.clubLevelSticker,
+            bundle: .module
+        )
+        .resizable()
+        .frame(width: 150, height: 180)
+        .topLeading()
     }
     
     
@@ -43,13 +46,13 @@ internal struct GamificationDashboardClubClanInfoView: View {
         .top()
     }
     private var clanClubNameBackhroundView: some View {
-        Image("clan_club_bg", bundle: .module)
+        Image(.clanClubBg)
             .resizable()
             .frame(width: 250, height: 45)
     }
     
     private var clubNameView: some View {
-        Text("KNIGHT CLUB")
+        Text(GamificationClubTypeDataModel.shared.clubType.rawValue)
             .appFont(.quanticoBold, size: 22)
             .foregroundStyle(.white)
     }
@@ -57,3 +60,6 @@ internal struct GamificationDashboardClubClanInfoView: View {
     
 }
 
+#Preview {
+    GamificationDashboardClubClanInfoView()
+}

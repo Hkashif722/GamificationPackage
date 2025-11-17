@@ -85,7 +85,7 @@ internal struct GamificationDashboardDataModel {
             let myRanking: [Ranking]?
         }
         
-        struct Ranking: Codable, Identifiable {
+        struct Ranking: Codable, Identifiable, Sendable {
             let id: UUID = UUID()
             let userId: Int
             let euSerId: String
@@ -114,7 +114,7 @@ internal struct GamificationDashboardDataModel {
         let id: Int
         let code: String
         let name: String
-        let createdDate: Date
+        let createdDate: String
         let isDeleted: Int
         let logoName: String
     }
@@ -141,6 +141,62 @@ internal struct GamificationDashboardDataModel {
         let blue: Int
         let yellow: Int
     }
+
+    struct UserProfileResponseModel: Codable {
+        let userId: String?
+        let userName: String?
+        let emailId: String?
+        let mobileNumber: String?
+        let userType: String?
+        let gender: String?
+        let timeZone: String?
+        let currency: String?
+        let language: String?
+        let profilePicture: String?
+        let reportsTo: String?
+        let business: String?
+        let group: String?
+        let area: String?
+        let location: String?
+        let dateOfBirth: String?
+        let dateOfJoining: String?
+        let configurationColumn1: String?
+        let configurationColumn2: String?
+        let configurationColumn3: String?
+        let configurationColumn4: String?
+        let configurationColumn5: String?
+        let configurationColumn6: String?
+        let configurationColumn7: String?
+        let configurationColumn8: String?
+        let configurationColumn9: String?
+        let configurationColumn10: String?
+        let configurationColumn11: String?
+        let configurationColumn12: String?
+        let configurationColumn13: String?
+        let configurationColumn14: String?
+        let configurationColumn15: String?
+        let district: String?
+        let locationId: String?
+        let businessId: String?
+        let areaId: String?
+        let groupId: String?
+        let organizationCode: String?
+        let profilePicturePath: String?
+        let house: String?
+        let roleName: String?
+        let jobRoleName: String?
+        let isManager: String?
+        let buddyTrainerName: String?
+        let mentorName: String?
+        let hrbpName: String?
+        let federationId: String?
+        let country: String?
+        
+        var computedUseProlePictureURL: URL {
+            
+        }
+    }
+
 }
 
 // ============================================================
@@ -156,7 +212,7 @@ internal extension GamificationDashboardDataModel {
         case levelList
         case missionCount
         case rewardPointCount
-        
+        case getProfileDetail
         // MARK: - PATH
         var path: String {
             switch self {
@@ -194,6 +250,13 @@ internal extension GamificationDashboardDataModel {
                     APIConst.courseBaseUrl,
                     APIConst.versionAPI,
                     APIConst.GamificationMissionCount // confirm if correct
+                ].joined(separator: "/")
+                
+            case .getProfileDetail:
+                return [
+                    APIConst.courseBaseUrl,
+                    APIConst.versionAPI,
+                    APIConst.GetUserProfile // confirm if correct
                 ].joined(separator: "/")
             }
         }

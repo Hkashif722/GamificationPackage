@@ -59,7 +59,7 @@ struct GamificationClubLevelItemView: View {
             .topLeading()
     }
     private var clubBGGradentBGView: some View {
-        Image(clubType.getGamificationClubLevelStickerBackground, bundle: .module)
+        Image(clubType.clubLevelBackground, bundle: .module)
             .resizable()
             .scaledToFill()
             .frame(width: 120, height: 140)
@@ -68,7 +68,7 @@ struct GamificationClubLevelItemView: View {
     
     
     private var clanStickerView: some View {
-        Image(clubType.getGamificationClublevelSticker, bundle: .module)
+        Image(clubType.clubLevelSticker, bundle: .module)
             .resizable()
             .scaledToFit()
             .frame(width: 85, height: 85)

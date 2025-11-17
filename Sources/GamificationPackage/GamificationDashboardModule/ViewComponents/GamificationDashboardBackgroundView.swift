@@ -18,7 +18,7 @@ internal struct GamificationDashboardBackgroundView: View {
     
     private var gamificationBackgroundImage: some View {
         SwiftUIUtility.BackgroundImageView(
-            imageName: "gm_Knight_Club_bg",
+            imageName: GamificationClubTypeDataModel.shared.clubType.dashboardBackground,
             contentMode: .fill
         )
     }

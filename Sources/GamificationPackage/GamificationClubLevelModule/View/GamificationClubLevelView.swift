@@ -32,32 +32,35 @@ internal struct GamificationClubLevelView: View {
         }
     }
     
-    
     private var clubLevelItemListView: some View {
         HStack(spacing: 16) {
             ForEach(
                 Array(GamificationClubTypeDataModel.ClubType.allCases.enumerated()),
                 id: \.element
-            ) { index , club in
-                GamificationClubLevelItemView(
-                    clubType: club,
-                    isClubLocked: club == GamificationClubTypeDataModel.ClubType.grandMaster
-                )
-                .shadow(
-                    color: selectedClub == club ? shadowColor : .clear,
-                    radius: 8
-                )
-                .onTapGesture {
-                    selectedClub = club
-                }
-                .scaleEffect(isAnimating ? 1.0 : 0.8)
-                .animation(
-                    .spring(response: 0.6, dampingFraction: 0.7)
-                    .delay(Double(index) * 0.15),
-                    value: isAnimating
-                )
+            ) { index, club in
+                clubItemView(for: club, at: index)
             }
         }
+    }
+
+    private func clubItemView(for club: GamificationClubTypeDataModel.ClubType, at index: Int) -> some View {
+        GamificationClubLevelItemView(
+            clubType: club,
+            isClubLocked: club == GamificationClubTypeDataModel.ClubType.grandmaster
+        )
+        .shadow(
+            color: selectedClub == club ? shadowColor : .clear,
+            radius: 8
+        )
+        .onTapGesture {
+            selectedClub = club
+        }
+        .scaleEffect(isAnimating ? 1.0 : 0.8)
+        .animation(
+            .spring(response: 0.6, dampingFraction: 0.7)
+            .delay(Double(index) * 0.15),
+            value: isAnimating
+        )
     }
     
 }

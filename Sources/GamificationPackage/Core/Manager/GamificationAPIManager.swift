@@ -23,6 +23,8 @@ public actor GamificationAPIManager {
         
         // Note: You'll need to make ApiService calls async
         ApiService.shared.setAuthToken(config.tokenProvider)
+        APIConfiguration.shared.baseURL = config.baseURL
+        
     }
 
     // Shared accessor

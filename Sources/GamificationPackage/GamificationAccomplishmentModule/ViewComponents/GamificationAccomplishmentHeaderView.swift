@@ -10,6 +10,8 @@ import SwiftUI
 
 struct GamificationAccomplishmentHeaderView: View {
     
+    let clubType = GamificationClubTypeDataModel.shared.clubType
+    
     var body: some View {
        
         ZStack(alignment: .bottom) {
@@ -49,7 +51,7 @@ struct GamificationAccomplishmentHeaderView: View {
     //MARK: Club Sticker View
     private var clubStikerView: some View {
         Image(
-            GamificationClubTypeDataModel.ClubType.knight.getGamificationClublevelSticker,
+            clubType.clubLevelSticker,
             bundle: .module
         )
         .resizable()

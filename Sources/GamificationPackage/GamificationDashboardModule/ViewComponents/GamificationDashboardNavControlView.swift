@@ -28,10 +28,10 @@ internal struct GamificationDashboardNavControlView: View {
         
         
     }
-    
+//    "gamification_nav_control_bg"
     
     private var navigationControlBackgroundView: some View {
-        Image("gamification_nav_control_bg", bundle: .module)
+        Image(.gamificationNavControlBg)
             .resizable()
             .frame(width: 190, height: 60)
     }
@@ -48,21 +48,21 @@ internal struct GamificationDashboardNavControlView: View {
     
     private var captureButtonView: some View {
         Button(action: {}) {
-            Image("ic_gm_capture", bundle: .module)
+            Image(.icGmCapture)
                 .frame(width: 45, height: 45)
         }
     }
     
     private var settingButtonView: some View {
         Button(action: {}) {
-            Image("ic_gm_setting", bundle: .module)
+            Image(.icGmSetting)
                 .frame(width: 45, height: 45)
         }
     }
     
     private var closeButtonView: some View {
         Button(action: {}) {
-            Image("ic_gm_setting", bundle: .module)
+            Image(.icGmClose)
                 .frame(width: 45, height: 45)
         }
     }

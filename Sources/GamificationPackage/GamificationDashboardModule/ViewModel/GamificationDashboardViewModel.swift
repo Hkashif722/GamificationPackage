@@ -14,107 +14,111 @@ class GamificationDashboardViewModel: BaseRoutableNavModel {
     
     @Published var myRankingResponseModel: GamificationDashboardDataModel.LeaderBoardResponseModel.Ranking?
     @Published var topRankingResponseModel: [GamificationDashboardDataModel.LeaderBoardResponseModel.Ranking]?
-    
     @Published var houseMasters: [GamificationDashboardDataModel.GETALLHouseMasterResponseModel] = []
-    @Published var gamificationLevels: [GamificationDashboardDataModel.GamificationLevelResponseModel] = []
     @Published var missionCount: GamificationDashboardDataModel.GamificationMissionResponseModel?
     @Published var rewardPoints: GamificationDashboardDataModel.HouseRewardPointCountResponseModel?
     
     override init(router: Router) {
         super.init(router: router)
     }
-}
-
-
-extension GamificationDashboardViewModel {
     
-    func getRanking() {
-        Task { [weak self] in
-            guard let self else { return }
-            
-            let payload = GamificationDashboardDataModel.LeaderboardRequestModel.LeaderboardPayloadRequestModel(
-                configuredColumnName: "undefined",
-                configuredColumnValue: "",
-                houseCode: nil,
-                ranks: 100
-            )
-            
-            do {
-                let endpoint = GamificationDashboardDataModel.Endpoint.leaderboard(payload: payload)
-                
-                let response = try await ApiService.shared.requestPostHeader(
-                    type: GamificationDashboardDataModel.LeaderBoardResponseModel.RankingResponse.self,
-                    model: endpoint,
-                    payload: payload
-                )
-                
-                await MainActor.run { self.handleRankingResponse(response) }
-                
-            } catch {
-                Logger.shared.log(.error, message: "Leaderboard API failed: \(error)")
-//                self.manageAlert(msg: "Unable to fetch leaderboard.")
+    func allApiCall() async {
+        do {
+            // Create the async tasks without capturing self
+            let rankingTask = Task {
+                try await getRankingResponse()
             }
+            
+            let houseMastersTask = Task {
+                try await getAllHouseMasterResponse()
+            }
+            
+            let missionCountTask = Task {
+                try await getMissionCountResponse()
+            }
+            
+            let levelsTask = Task {
+                try await getGamificationLevelResponse()
+            }
+            
+            // Await all results
+            let ranking = try await rankingTask.value
+            let masters = try await houseMastersTask.value
+            let missions = try await missionCountTask.value
+            let levelData = try await levelsTask.value
+            
+            // Update properties on the main actor
+            handleRankingResponse(ranking)
+            self.houseMasters = masters
+            self.missionCount = missions
+            GamificationClubTypeDataModel.shared.ranges = levelData
+            
+        } catch {
+            Logger.shared.log(.error, message: "Parallel API calls failed: \(error)")
         }
     }
-    
+}
+
+// MARK: - Leaderboard API
+
+extension GamificationDashboardViewModel {
+    private func getRankingResponse() async throws -> GamificationDashboardDataModel.LeaderBoardResponseModel.RankingResponse {
+        let payload = GamificationDashboardDataModel.LeaderboardRequestModel.LeaderboardPayloadRequestModel(
+            configuredColumnName: "undefined",
+            configuredColumnValue: "",
+            houseCode: nil,
+            ranks: 100
+        )
+        let endpoint = GamificationDashboardDataModel.Endpoint.leaderboard(payload: payload)
+        return try await ApiService.shared.requestPostHeader(
+            type: GamificationDashboardDataModel.LeaderBoardResponseModel.RankingResponse.self,
+            model: endpoint,
+            payload: payload
+        )
+    }
+}
+
+// MARK: - House Master API
+
+extension GamificationDashboardViewModel {
+    private func getAllHouseMasterResponse() async throws -> [GamificationDashboardDataModel.GETALLHouseMasterResponseModel] {
+        let endpoint = GamificationDashboardDataModel.Endpoint.houseMasterList
+        return try await ApiService.shared.requestGetHeader(
+            type: [GamificationDashboardDataModel.GETALLHouseMasterResponseModel].self,
+            model: endpoint
+        )
+    }
+}
+
+// MARK: - Mission Count API
+
+extension GamificationDashboardViewModel {
+    private func getMissionCountResponse() async throws -> GamificationDashboardDataModel.GamificationMissionResponseModel {
+        let endpoint = GamificationDashboardDataModel.Endpoint.missionCount
+        return try await ApiService.shared.requestGetHeader(
+            type: GamificationDashboardDataModel.GamificationMissionResponseModel.self,
+            model: endpoint
+        )
+    }
+}
+
+// MARK: - Gamification Level API
+
+extension GamificationDashboardViewModel {
+    private func getGamificationLevelResponse() async throws -> [GamificationDashboardDataModel.GamificationLevelResponseModel] {
+        let endpoint = GamificationDashboardDataModel.Endpoint.levelList
+        return try await ApiService.shared.requestGetHeader(
+            type: [GamificationDashboardDataModel.GamificationLevelResponseModel].self,
+            model: endpoint
+        )
+    }
+}
+
+// MARK: - Response Handlers
+
+extension GamificationDashboardViewModel {
     private func handleRankingResponse(_ response: GamificationDashboardDataModel.LeaderBoardResponseModel.RankingResponse) {
-        if let myRank = response.myRanking?.first {
-            self.myRankingResponseModel = myRank
-        } else {
-            self.myRankingResponseModel = nil
-        }
-        
-        self.topRankingResponseModel = response.topRanking
+        myRankingResponseModel = response.myRanking?.first
+        topRankingResponseModel = response.topRanking
     }
 }
-
-
-extension GamificationDashboardViewModel {
-    
-    func getAllHouseMaster() {
-        Task { [weak self] in
-            guard let self else { return }
-            
-            let endpoint = GamificationDashboardDataModel.Endpoint.houseMasterList
-            
-            do {
-                let response = try await ApiService.shared.requestGetHeader(
-                    type: [GamificationDashboardDataModel.GETALLHouseMasterResponseModel].self,
-                    model: endpoint
-                )
-                
-                await MainActor.run { self.houseMasters = response }
-                
-            } catch {
-                Logger.shared.log(.error, message: "House Master API failed: \(error)")
-//                self.manageAlert(msg: "Unable to fetch house masters.")
-            }
-        }
-    }
-}
-
-
-extension GamificationDashboardViewModel {
-    
-    func getMissionCount() {
-        Task { [weak self] in
-            guard let self else { return }
-            
-            let endpoint = GamificationDashboardDataModel.Endpoint.missionCount
-            
-            do {
-                let response = try await ApiService.shared.requestGetHeader(
-                    type: GamificationDashboardDataModel.GamificationMissionResponseModel.self,
-                    model: endpoint
-                )
-                
-                await MainActor.run { self.missionCount = response }
-                
-            } catch {
-                Logger.shared.log(.error, message: "Mission Count API failed: \(error)")
-//                self.manageAlert(msg: "Unable to fetch mission count.")
-            }
-        }
-    }
-}
-
