@@ -5,25 +5,14 @@
 //  Created by Kashif Hussain on 16/11/25.
 //
 
-
-//
-//  ResourceUtils.swift
-//  SWAYAM 2.0 copy
-//
-//  Created by Kashif Hussain on 06/03/25.
-//  Copyright © 2025 EnthrallTech. All rights reserved.
-//
-
 import Foundation
 
 
 internal struct ResourceUtils {
     
     static func launchS3Resourse(_ filePath: String) -> String {
-        
-        let defaults = UserDefaults.standard
-        
-        let isBlobeEnabled = defaults.string(forKey: "isBlobStorageEnabled") == "No" ? false : true
+       
+        let isBlobeEnabled =  GamificationAPIManager.shared.isBlobEnabled
         
         if filePath.contains("content.gogetempowered.com") {
             return filePath
@@ -67,7 +56,7 @@ internal struct ResourceUtils {
         }else{
             if let url = URL(string: pathFinal), url.scheme?.hasPrefix("https") == true {
                 pathFinal = pathFinal.replacingHost(with: "content.gogetempowered.com")
-                let orgcode = LoginUtility.shared.getOrganizationCode().lowercased()
+                let orgcode = GamificationAPIManager.shared.getOrgCode
                 if !orgcode.isEmpty {
                     if pathFinal.contains(orgcode), let arrayPath = pathFinal.components(separatedBy: orgcode).last {
                         pathFinal = [APIConst.ContentPath,orgcode].joinWithPathSeparator()
@@ -108,7 +97,7 @@ internal struct ResourceUtils {
         
         let defaults = UserDefaults.standard
         
-        let isBlobStorageEnabled = defaults.string(forKey: "isBlobStorageEnabled") == "No" ? false : true
+        let isBlobStorageEnabled =  GamificationAPIManager.shared.isBlobEnabled
         
         if  !isBlobStorageEnabled {
             var pathFinal = filePath.removeExtraCharactor()
@@ -138,7 +127,7 @@ internal struct ResourceUtils {
                 return filePath
             }
             var pathFinal = filePath.removeExtraCharactor()
-            let orgCode = LoginUtility.shared.getOrganizationCode().lowercased()
+            let orgCode = GamificationAPIManager.shared.getOrgCode
 
             
             pathFinal = pathFinal.replace("http:", replacement: "https:")
@@ -153,7 +142,7 @@ internal struct ResourceUtils {
                 }
             }
             
-            if pathFinal.contains(find: orgCode) {
+            if pathFinal.contains(orgCode) {
                 let imgURLs = pathFinal.components(separatedBy: orgCode)
                 if imgURLs[1].hasPrefix("/") {
                     return APIConst.ContentPath+"/"+orgCode+imgURLs[1]

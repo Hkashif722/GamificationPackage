@@ -28,4 +28,23 @@ extension String {
         return self.trimmingCharacters(in: NSCharacterSet.whitespaces)
     }
     
+    
+    func replacingHost(with newHost: String) -> String {
+        guard var components = URLComponents(string: self), components.host != nil else {
+            return self
+        }
+        components.host = newHost
+        return components.string ?? self
+    }
+    
+    func manageExtraCha() -> String{
+        var outPutString = self
+        if self.contains("\\"){
+            outPutString = self.replace("\\", replacement: "/")
+        }
+        return outPutString
+    }
 }
+
+
+

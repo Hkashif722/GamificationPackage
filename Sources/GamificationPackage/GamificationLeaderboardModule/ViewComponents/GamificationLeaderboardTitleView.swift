@@ -10,6 +10,7 @@ import SwiftUI
 
 internal struct GamificationLeaderboardTitleView: View {
     
+    let myRanking: GamificationDashboardDataModel.LeaderBoardResponseModel.Ranking?
     
     var body: some View {
         HStack(alignment: .top, spacing: 16) {
@@ -38,7 +39,7 @@ internal struct GamificationLeaderboardTitleView: View {
     
     private var userProfileView: some View {
         SwiftUIUtility.ProfileImageViewWithVariableCorner(
-            imageUrl: URL(string:""),
+            imageUrl: myRanking?.fullProfilePath ?? URL(string: ""),
             size: 45, cornerRadius: 10,
             profileBorderColor: .white
         )
@@ -55,13 +56,13 @@ internal struct GamificationLeaderboardTitleView: View {
     
     
     private var userNameView: some View {
-        Text("LMS Admin")
+        Text(myRanking?.userName ?? "Undefined")
             .appFont(.poppinsRegular, size: 14)
             .foregroundStyle(.white)
     }
     
     private var userPointView: some View {
-        Text("7999")
+        Text(myRanking?.totalPoint.description ?? "Undefined")
             .appFont(.poppinsBold, size: 14, weight: .bold)
             .foregroundStyle(.white)
     }
@@ -73,7 +74,7 @@ internal struct GamificationLeaderboardTitleView: View {
         Color.purple
             .ignoresSafeArea()
         
-        GamificationLeaderboardTitleView()
+        GamificationLeaderboardTitleView(myRanking: .preview)
         
     }
 }

@@ -10,6 +10,8 @@ import SwiftUI
 
 internal struct GamificationCriticalMissionSeeAllButtonView: View {
     
+    let didSelectSeeAll: (() -> ())
+    
     var body: some View {
         seeAllButtonView
     }
@@ -35,5 +37,5 @@ internal struct GamificationCriticalMissionSeeAllButtonView: View {
 }
 
 #Preview {
-    GamificationCriticalMissionSeeAllButtonView()
+    GamificationCriticalMissionSeeAllButtonView(didSelectSeeAll: {})
 }

@@ -10,6 +10,8 @@ import SwiftUI
 
 internal struct GamificationDashboardScoreView: View {
     
+    let score: Int?
+    
     var body: some View {
         
         ZStack(alignment: .trailing) {
@@ -47,7 +49,7 @@ internal struct GamificationDashboardScoreView: View {
     }
     
     private var scoreInfoView: some View {
-        Text("2,52,104")
+        Text("\(score ?? 0)")
             .appFont(.poppinsBold, size: 20, weight: .bold)
     }
 }
@@ -55,6 +57,6 @@ internal struct GamificationDashboardScoreView: View {
 #Preview {
     ZStack {
         GamificationDashboardBackgroundView()
-        GamificationDashboardScoreView()
+        GamificationDashboardScoreView(score: 125)
     }
 }

@@ -104,8 +104,7 @@ internal struct GamificationDashboardDataModel {
             let createdDate: String
             
             var fullProfilePath: URL? {
-//                ResourceUtils.getResourceURLPath(profilePicture)
-                return nil
+                ResourceUtils.getResourceURLPath(profilePicture)
             }
         }
     }
@@ -192,8 +191,8 @@ internal struct GamificationDashboardDataModel {
         let federationId: String?
         let country: String?
         
-        var computedUseProlePictureURL: URL {
-            
+        var computedUseProlePictureURL: URL? {
+            ResourceUtils.getResourceURLPath(self.profilePicture)
         }
     }
 
@@ -293,3 +292,112 @@ internal extension GamificationDashboardDataModel {
     }
 }
 
+
+
+extension GamificationDashboardDataModel.LeaderBoardResponseModel.Ranking {
+    static let preview: GamificationDashboardDataModel.LeaderBoardResponseModel.Ranking = .init(
+        userId: 12345,
+        euSerId: "EU12345",
+        userName: "JohnDoe",
+        totalPoint: 15750,
+        profilePicture: "/profiles/johndoe.jpg",
+        gender: "male",
+        rank: 1,
+        level: "Gold",
+        maximumLevelPoint: 20000,
+        levelCode: "GOLD_3",
+        houseCode: "HOUSE_A",
+        houseName: "Phoenix",
+        eId: "E001234",
+        country: "US",
+        createdDate: "2024-01-15T10:30:00Z"
+    )
+    
+    static let previewArray: [GamificationDashboardDataModel.LeaderBoardResponseModel.Ranking] = [
+        .init(
+            userId: 12345,
+            euSerId: "EU12345",
+            userName: "JohnDoe",
+            totalPoint: 15750,
+            profilePicture: "/profiles/johndoe.jpg",
+            gender: "male",
+            rank: 1,
+            level: "Gold",
+            maximumLevelPoint: 20000,
+            levelCode: "GOLD_3",
+            houseCode: "HOUSE_A",
+            houseName: "Phoenix",
+            eId: "E001234",
+            country: "US",
+            createdDate: "2024-01-15T10:30:00Z"
+        ),
+        .init(
+            userId: 67890,
+            euSerId: "EU67890",
+            userName: "SarahSmith",
+            totalPoint: 14200,
+            profilePicture: "/profiles/sarahsmith.jpg",
+            gender: "female",
+            rank: 2,
+            level: "Gold",
+            maximumLevelPoint: 20000,
+            levelCode: "GOLD_2",
+            houseCode: "HOUSE_B",
+            houseName: "Dragon",
+            eId: "E005678",
+            country: "UK",
+            createdDate: "2024-02-20T14:45:00Z"
+        ),
+        .init(
+            userId: 24680,
+            euSerId: "EU24680",
+            userName: "MikeJohnson",
+            totalPoint: 12850,
+            profilePicture: "/profiles/mikejohnson.jpg",
+            gender: "male",
+            rank: 3,
+            level: "Silver",
+            maximumLevelPoint: 15000,
+            levelCode: "SILVER_3",
+            houseCode: "HOUSE_C",
+            houseName: "Griffin",
+            eId: "E009876",
+            country: "CA",
+            createdDate: "2024-03-10T09:15:00Z"
+        ),
+        .init(
+            userId: 13579,
+            euSerId: "EU13579",
+            userName: "EmilyBrown",
+            totalPoint: 11500,
+            profilePicture: "/profiles/emilybrown.jpg",
+            gender: "female",
+            rank: 4,
+            level: "Silver",
+            maximumLevelPoint: 15000,
+            levelCode: "SILVER_2",
+            houseCode: "HOUSE_A",
+            houseName: "Phoenix",
+            eId: "E002468",
+            country: "AU",
+            createdDate: "2024-04-05T16:20:00Z"
+        ),
+        .init(
+            userId: 98765,
+            euSerId: "EU98765",
+            userName: "AlexWilson",
+            totalPoint: 9800,
+            profilePicture: "/profiles/alexwilson.jpg",
+            gender: nil,
+            rank: 5,
+            level: "Bronze",
+            maximumLevelPoint: 10000,
+            levelCode: "BRONZE_3",
+            houseCode: "HOUSE_D",
+            houseName: "Unicorn",
+            eId: "E003691",
+            country: nil,
+            createdDate: "2024-05-12T11:00:00Z"
+        )
+    ]
+}

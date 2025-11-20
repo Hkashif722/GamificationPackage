@@ -13,7 +13,15 @@ public actor GamificationAPIManager {
 
     public static let shared = GamificationAPIManager()
     
-    private var config: GamificationConfig?
+    nonisolated(unsafe) private var config: GamificationConfig?
+    
+    nonisolated internal var getOrgCode: String {
+        config?.orgCode ?? ""
+    }
+    
+    nonisolated internal var isBlobEnabled: Bool {
+        config?.isBlobEnabled ?? true
+    }
     
     private init() {}
 
@@ -23,12 +31,12 @@ public actor GamificationAPIManager {
         
         // Note: You'll need to make ApiService calls async
         ApiService.shared.setAuthToken(config.tokenProvider)
-        APIConfiguration.shared.baseURL = config.baseURL
+        APIConfiguration.shared.baseURL = APIConst.baseURL
         
     }
 
     // Shared accessor
     public var baseURL: String {
-        config?.baseURL ?? ""
+        APIConst.baseURL
     }
 }

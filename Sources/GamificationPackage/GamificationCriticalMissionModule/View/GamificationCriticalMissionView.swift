@@ -10,6 +10,14 @@ import SwiftUI
 
 internal struct GamificationCriticalMissionView: View {
     
+    @StateObject private var criticalMissionViewModel: GamificationCriticalMissionViewModel
+    
+    init(router: Router) {
+       _criticalMissionViewModel = StateObject(
+        wrappedValue: GamificationCriticalMissionViewModel(router: router)
+       )
+    }
+    
     var body: some View {
         ZStack(alignment: .topTrailing) {
             closeButtonView
@@ -20,13 +28,20 @@ internal struct GamificationCriticalMissionView: View {
             .center()
             .ignoresSafeArea()
         }
+        .task {
+            await criticalMissionViewModel.getCriticalMissions()
+        }
     }
     
     
     private var gamificationCriticalMissionView: some View {
         VStack(spacing: 8) {
             messionTitleView
-            GamificationCriticalMissionListView()
+            GamificationCriticalMissionListView(
+                todosModel: criticalMissionViewModel.criticalMissions,
+                didSelectViewClub: {},
+                didSelectSeeAll: {}
+            )
         }
         
     }
@@ -40,7 +55,7 @@ internal struct GamificationCriticalMissionView: View {
     }
     
     private var closeButtonView: some View {
-        Button(action: { }) {
+        Button(action: criticalMissionViewModel.dismissPopup) {
             Image("ic_gm_close", bundle: .module)
                 .frame(width: 45, height: 45)
         }
@@ -54,6 +69,6 @@ internal struct GamificationCriticalMissionView: View {
     ZStack {
         GamificationDashboardBackgroundView()
             .blur(radius: 4)
-        GamificationCriticalMissionView()
+        GamificationCriticalMissionView(router: Router())
     }
 }

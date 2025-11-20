@@ -10,6 +10,10 @@ import SwiftUI
 
 internal struct GamificationLeaderboardView: View {
     
+    let router: Router
+    let myRanking: GamificationDashboardDataModel.LeaderBoardResponseModel.Ranking?
+    let topRanking: [GamificationDashboardDataModel.LeaderBoardResponseModel.Ranking]
+    
     var body: some View {
         ZStack(alignment: .topTrailing) {
             closeButtonView
@@ -24,7 +28,7 @@ internal struct GamificationLeaderboardView: View {
     
     private var containerGroupView: some View {
         VStack(spacing: 16) {
-            GamificationLeaderboardTitleView()
+            GamificationLeaderboardTitleView(myRanking: myRanking)
             leaderBoardContentView
         }
         .padding(.init(top: 10, leading: 0, bottom: 36, trailing: 0))
@@ -35,12 +39,12 @@ internal struct GamificationLeaderboardView: View {
         
         VStack(spacing: 0) {
             
-            LeaderBoardStageProfileView()
+            LeaderBoardStageProfileView(topRanking: topRanking)
             
             Divider()
                 .background(Color(hex: "#334082"))
             
-            GamificationLeaderboardUserInfoListView()
+            GamificationLeaderboardUserInfoListView(topRanking: topRanking)
                 .padding(.horizontal, 10)
         }
         .background(
@@ -57,7 +61,7 @@ internal struct GamificationLeaderboardView: View {
     
     
     private var closeButtonView: some View {
-        Button(action: { }) {
+        Button(action: router.dismissPopup ) {
             Image("ic_gm_close", bundle: .module)
                 .frame(width: 45, height: 45)
         }
@@ -72,6 +76,10 @@ internal struct GamificationLeaderboardView: View {
         GamificationDashboardBackgroundView()
             .blur(radius: 4)
             
-        GamificationLeaderboardView()
+        GamificationLeaderboardView(
+            router: Router(),
+            myRanking: GamificationDashboardDataModel.LeaderBoardResponseModel.Ranking.preview,
+            topRanking: GamificationDashboardDataModel.LeaderBoardResponseModel.Ranking.previewArray
+        )
     }
 }

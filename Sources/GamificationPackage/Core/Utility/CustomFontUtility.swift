@@ -27,6 +27,11 @@ internal extension Font {
         case poppinsMedium = "Poppins-Medium"
         case poppinsSemiBold = "Poppins-SemiBold"
         case poppinsBold = "Poppins-Bold"
+        
+        // Colombo
+        case colomboRegular = "PostNoBillsColombo-Regular"
+        case colomboBold = "PostNoBillsColombo-Bold"
+        case colomboMedium = "PostNoBillsColombo-Medium"
     }
 
     /// Creates a custom font with optional weight.

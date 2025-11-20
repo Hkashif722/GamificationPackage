@@ -7,7 +7,11 @@
 
 
 enum Route: Hashable {
-    case home
-    case details(id: Int)
-    case centerPopup
+    case happyLearningHour
+    case criticalMission
+    case leaderboard
+    case mission
+    case dailyLoginBonus
+    case campaigns
+    case campaignLeaderboard
 }

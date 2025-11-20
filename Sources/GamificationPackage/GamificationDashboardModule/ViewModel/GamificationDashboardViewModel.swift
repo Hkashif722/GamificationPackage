@@ -8,12 +8,13 @@
 
 import Foundation
 import NetworkService
+import SwiftUI
 
 @MainActor
-class GamificationDashboardViewModel: BaseRoutableNavModel {
+internal class GamificationDashboardViewModel: BaseRoutableNavModel {
     
     @Published var myRankingResponseModel: GamificationDashboardDataModel.LeaderBoardResponseModel.Ranking?
-    @Published var topRankingResponseModel: [GamificationDashboardDataModel.LeaderBoardResponseModel.Ranking]?
+    @Published var topRankingResponseModel: [GamificationDashboardDataModel.LeaderBoardResponseModel.Ranking] = []
     @Published var houseMasters: [GamificationDashboardDataModel.GETALLHouseMasterResponseModel] = []
     @Published var missionCount: GamificationDashboardDataModel.GamificationMissionResponseModel?
     @Published var rewardPoints: GamificationDashboardDataModel.HouseRewardPointCountResponseModel?
@@ -41,17 +42,23 @@ class GamificationDashboardViewModel: BaseRoutableNavModel {
                 try await getGamificationLevelResponse()
             }
             
+            let getUserProfileDetail = Task {
+                try await getUerProfileDetails()
+            }
+            
             // Await all results
             let ranking = try await rankingTask.value
             let masters = try await houseMastersTask.value
             let missions = try await missionCountTask.value
             let levelData = try await levelsTask.value
+            let userProfileDetail = try await getUserProfileDetail.value
             
             // Update properties on the main actor
             handleRankingResponse(ranking)
             self.houseMasters = masters
             self.missionCount = missions
             GamificationClubTypeDataModel.shared.ranges = levelData
+            GamificationClubTypeDataModel.shared.userProfileDetail = userProfileDetail
             
         } catch {
             Logger.shared.log(.error, message: "Parallel API calls failed: \(error)")
@@ -61,7 +68,7 @@ class GamificationDashboardViewModel: BaseRoutableNavModel {
 
 // MARK: - Leaderboard API
 
-extension GamificationDashboardViewModel {
+internal extension GamificationDashboardViewModel {
     private func getRankingResponse() async throws -> GamificationDashboardDataModel.LeaderBoardResponseModel.RankingResponse {
         let payload = GamificationDashboardDataModel.LeaderboardRequestModel.LeaderboardPayloadRequestModel(
             configuredColumnName: "undefined",
@@ -80,7 +87,7 @@ extension GamificationDashboardViewModel {
 
 // MARK: - House Master API
 
-extension GamificationDashboardViewModel {
+internal extension GamificationDashboardViewModel {
     private func getAllHouseMasterResponse() async throws -> [GamificationDashboardDataModel.GETALLHouseMasterResponseModel] {
         let endpoint = GamificationDashboardDataModel.Endpoint.houseMasterList
         return try await ApiService.shared.requestGetHeader(
@@ -92,7 +99,7 @@ extension GamificationDashboardViewModel {
 
 // MARK: - Mission Count API
 
-extension GamificationDashboardViewModel {
+internal extension GamificationDashboardViewModel {
     private func getMissionCountResponse() async throws -> GamificationDashboardDataModel.GamificationMissionResponseModel {
         let endpoint = GamificationDashboardDataModel.Endpoint.missionCount
         return try await ApiService.shared.requestGetHeader(
@@ -104,7 +111,7 @@ extension GamificationDashboardViewModel {
 
 // MARK: - Gamification Level API
 
-extension GamificationDashboardViewModel {
+internal extension GamificationDashboardViewModel {
     private func getGamificationLevelResponse() async throws -> [GamificationDashboardDataModel.GamificationLevelResponseModel] {
         let endpoint = GamificationDashboardDataModel.Endpoint.levelList
         return try await ApiService.shared.requestGetHeader(
@@ -114,11 +121,93 @@ extension GamificationDashboardViewModel {
     }
 }
 
+// MARK: Get Profile API
+internal extension GamificationDashboardViewModel {
+    private func getUerProfileDetails() async throws -> GamificationDashboardDataModel.UserProfileResponseModel {
+        let endpoint = GamificationDashboardDataModel.Endpoint.getProfileDetail
+        return try await ApiService.shared.requestGetHeader(
+            type: GamificationDashboardDataModel.UserProfileResponseModel.self,
+            model: endpoint
+        )
+    }
+}
+
 // MARK: - Response Handlers
 
-extension GamificationDashboardViewModel {
+internal extension GamificationDashboardViewModel {
     private func handleRankingResponse(_ response: GamificationDashboardDataModel.LeaderBoardResponseModel.RankingResponse) {
         myRankingResponseModel = response.myRanking?.first
         topRankingResponseModel = response.topRanking
+    }
+}
+
+
+
+//MARK: Handle Navigation
+internal extension GamificationDashboardViewModel {
+    
+    @ViewBuilder
+    func popupView(_ popup: Route) -> some View {
+        
+        switch popup {
+            
+        case .happyLearningHour:
+            
+            GamificationHappyLearningView(router: self.router)
+            
+        case .criticalMission:
+            GamificationCriticalMissionView(router: self.router)
+            
+        case .leaderboard:
+           
+            GamificationLeaderboardView(router: self.router, myRanking: self.myRankingResponseModel, topRanking: self.topRankingResponseModel)
+            
+            
+        case .mission:
+            GamificationMissionTypeView()
+            
+        default:
+            GamificationMissionCardStackingView()
+        }
+        
+    }
+    
+    func handleDeckMenuSelection(_ type: GamificationDashboardDataModel.MenuTrayActionButtons.ActionType) {
+        switch type {
+        case .happyLearningHour:
+            router.presentPopup(.happyLearningHour)
+        case .criticalMission:
+            router.presentPopup(.criticalMission)
+        case .leaderboard:
+            router.presentPopup(.leaderboard)
+        case .mission:
+            router.presentPopup(.mission)
+        case .dailyLoginBonus:
+            router.presentPopup(.dailyLoginBonus)
+        case .campaigns:
+            router.presentPopup(.campaigns)
+        case .campaignLeaderboard:
+            router.presentPopup(.campaignLeaderboard)
+        }
+    }
+    
+    @MainActor
+    func presentPopupView(_ type:  GamificationDashboardDataModel.MenuTrayActionButtons.ActionType) {
+        switch type {
+        case .happyLearningHour:
+            router.presentPopup(.happyLearningHour)
+        case .criticalMission:
+            router.presentPopup(.criticalMission)
+        case .leaderboard:
+            router.presentPopup(.leaderboard)
+        case .mission:
+            router.presentPopup(.mission)
+        case .dailyLoginBonus:
+            router.presentPopup(.dailyLoginBonus)
+        case .campaigns:
+            router.presentPopup(.campaigns)
+        case .campaignLeaderboard:
+            router.presentPopup(.campaignLeaderboard)
+        }
     }
 }

@@ -31,7 +31,7 @@ struct GamificationDashBoardView: View {
             
             // Popup presentation
             if let popup = router.popup {
-                popupView(popup)
+                gmDashBoardViewModel.popupView(popup)
                     .transition(.asymmetric(
                         insertion: .scale(scale: 0.85).combined(with: .opacity),
                         removal: .scale(scale: 0.85).combined(with: .opacity)
@@ -51,27 +51,13 @@ struct GamificationDashBoardView: View {
             GamificationDashboardClubClanInfoView()
             GamificationDashboardNavControlView()
             GamificationDashboardProfileItemsView()
-            GamificationDashboardScoreView()
-            GamificationDashboardCentralMenuItemDeck(onAction: { action in
-                router.presentPopup(.centerPopup)
-            })
+            GamificationDashboardScoreView(score: gmDashBoardViewModel.myRankingResponseModel?.totalPoint)
+            GamificationDashboardCentralMenuItemDeck(onAction: gmDashBoardViewModel.presentPopupView(_:))
         }
         .fullSize()
         .task {
             await gmDashBoardViewModel.allApiCall()
         }
     }
-    
-    // Popup Renderer
-    @ViewBuilder
-    private func popupView(_ popup: Route) -> some View {
-        
-        GamificationMissionTypeView()
-//        switch popup {
-//        case .centerPopup:
-//            GamificationPopupCard {
-//                router.dismissPopup()
-//            }
-//        }
-    }
+
 }

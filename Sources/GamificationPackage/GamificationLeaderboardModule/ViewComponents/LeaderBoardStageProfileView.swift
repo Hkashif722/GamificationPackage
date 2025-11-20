@@ -10,6 +10,8 @@ import SwiftUI
 
 internal struct LeaderBoardStageProfileView: View {
     
+    let topRanking: [GamificationDashboardDataModel.LeaderBoardResponseModel.Ranking]
+    
     var body: some View {
         
         HStack(alignment: .bottom, spacing: 0) {
@@ -44,80 +46,96 @@ internal struct LeaderBoardStageProfileView: View {
     
     // ProfileInfo View
     
+    @ViewBuilder
     private var secondaryProfileInfoView: some View {
-        frostView(corners: [.topLeft])
-            .frame(width: 130, height: 45)
-            .overlay(alignment: .bottom) {
-                profileInfoView(name: "Alan", points: "28090")
-                    .frame(width: 100, height: 35)
-            }
+        if let secondRank = topRanking[safe: 1] {
+            frostView(corners: [.topLeft])
+                .frame(width: 130, height: 45)
+                .overlay(alignment: .bottom) {
+                    profileInfoView(name: secondRank.userName, points: String(secondRank.totalPoint))
+                        .frame(width: 100, height: 35)
+                }
+        }
             
     }
     
-    
+    @ViewBuilder
     private var firstProfileInfoView: some View {
-        frostView(corners: [.topLeft, .topRight])
-            .frame(width: 130, height: 60)
-            .overlay(alignment: .bottom) {
-                profileInfoView(name: "Rebacca", points: "2800")
-                    .frame(width: 100, height: 35)
-                
-            }
+        if let firseRank = topRanking[safe: 0] {
+            frostView(corners: [.topLeft, .topRight])
+                .frame(width: 130, height: 60)
+                .overlay(alignment: .bottom) {
+                    profileInfoView(name: firseRank.userName, points: String(firseRank.totalPoint))
+                        .frame(width: 100, height: 35)
+                    
+                }
+        }
             
     }
     
+    @ViewBuilder
     private var tertiaryProfileInfoView: some View {
-        frostView(corners: [.topRight])
-            .frame(width: 130, height: 37)
-            .overlay(alignment: .bottom) {
-                profileInfoView(name: "Jessica", points: "21090")
-                    .frame(width: 100, height: 35)
-            }
+        if let thirdRank = topRanking[safe: 2] {
+            frostView(corners: [.topRight])
+                .frame(width: 130, height: 37)
+                .overlay(alignment: .bottom) {
+                    profileInfoView(name: thirdRank.userName, points: String(thirdRank.totalPoint))
+                        .frame(width: 100, height: 35)
+                }
+        }
            
     }
     
    // Profile View
-    
+    @ViewBuilder
     private var secondaryProfileView: some View {
-        SwiftUIUtility.ProfileImageViewWithGradientBorder(
-            imageUrl: URL(string:""),
-            size: 50,
-            gradientColors: [Color(hex: "#FFFFFF"), Color(hex: "#575757")],
-            borderWidth: 4
-        )
-        .overlay(alignment: .bottom) {
-            rankBadgeView(rank: "2", size: 25)
+        if let secondRank = topRanking[safe: 1] {
+            SwiftUIUtility.ProfileImageViewWithGradientBorder(
+                imageUrl: secondRank.fullProfilePath,
+                size: 50,
+                gradientColors: [Color(hex: "#FFFFFF"), Color(hex: "#575757")],
+                borderWidth: 4
+            )
+            .overlay(alignment: .bottom) {
+                rankBadgeView(rank: "2", size: 25)
+            }
+            .zIndex(1)
         }
-        .zIndex(1)
     }
     
+    @ViewBuilder
     private var firstProfileView: some View {
-        SwiftUIUtility.ProfileImageViewWithGradientBorder(
-            imageUrl: URL(string:""),
-            size: 60,
-            gradientColors: [Color(hex: "#FFDD57"), Color(hex: "#FFFF9D")],
-            borderWidth: 5
-        )
-        .overlay(alignment: .topLeading) {
-            crownView
+        if let firseRank = topRanking[safe: 0] {
+            SwiftUIUtility.ProfileImageViewWithGradientBorder(
+                imageUrl: firseRank.fullProfilePath,
+                size: 60,
+                gradientColors: [Color(hex: "#FFDD57"), Color(hex: "#FFFF9D")],
+                borderWidth: 5
+            )
+            .overlay(alignment: .topLeading) {
+                crownView
+            }
+            .overlay(alignment: .bottom) {
+                rankBadgeView(rank: "1")
+            }
+            .zIndex(1)
         }
-        .overlay(alignment: .bottom) {
-            rankBadgeView(rank: "1")
-        }
-        .zIndex(1)
     }
     
+    @ViewBuilder
     private var tertiaryProfileView: some View {
-        SwiftUIUtility.ProfileImageViewWithGradientBorder(
-            imageUrl: URL(string:""),
-            size: 40,
-            gradientColors: [Color(hex: "#FF9511"), Color(hex: "#725502")],
-            borderWidth: 3
-        )
-        .overlay(alignment: .bottom) {
-            rankBadgeView(rank: "3", size: 20)
+        if let thirdRank = topRanking[safe: 2] {
+            SwiftUIUtility.ProfileImageViewWithGradientBorder(
+                imageUrl: thirdRank.fullProfilePath,
+                size: 40,
+                gradientColors: [Color(hex: "#FF9511"), Color(hex: "#725502")],
+                borderWidth: 3
+            )
+            .overlay(alignment: .bottom) {
+                rankBadgeView(rank: "3", size: 20)
+            }
+            .zIndex(1)
         }
-        .zIndex(1)
     }
     
     

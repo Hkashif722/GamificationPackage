@@ -9,6 +9,11 @@
 import SwiftUI
 
 struct GamificationCriticalMissionListView: View {
+    
+    let todosModel: [GamificationCriticalMissionDataModel.TODOResponseModel]
+    let didSelectViewClub: (() -> ())
+    let didSelectSeeAll:  (() -> ())
+    
     var body: some View {
         VStack {
             GamificationCriticalMissionHeaderView()
@@ -26,15 +31,18 @@ struct GamificationCriticalMissionListView: View {
     private var gamificationCriticalMissionContentView: some View {
         VStack {
             gamificationCriticalMissionListView
-            GamificationCriticalMissionSeeAllButtonView()
+            GamificationCriticalMissionSeeAllButtonView(didSelectSeeAll: didSelectSeeAll)
         }
     }
     
     private var gamificationCriticalMissionListView: some View {
         ScrollView {
             VStack(spacing: 16) {
-                ForEach(0..<5) { _ in
-                    GamificationCriticalMissionListItemView()
+                ForEach(todosModel) { todo in
+                    GamificationCriticalMissionListItemView(
+                        todoModel: todo,
+                        didSelectViewClub: didSelectViewClub
+                    )
                     Divider()
                         .background(Color.white)
                 }
@@ -54,5 +62,9 @@ struct GamificationCriticalMissionListView: View {
 }
 
 #Preview {
-    GamificationCriticalMissionListView()
+    GamificationCriticalMissionListView(
+        todosModel: GamificationCriticalMissionDataModel.TODOResponseModel.previewList,
+        didSelectViewClub: {},
+        didSelectSeeAll: {}
+    )
 }

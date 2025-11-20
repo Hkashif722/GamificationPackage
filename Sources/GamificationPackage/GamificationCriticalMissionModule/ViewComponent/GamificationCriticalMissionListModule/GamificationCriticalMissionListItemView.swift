@@ -10,6 +10,10 @@ import SwiftUI
 
 struct GamificationCriticalMissionListItemView: View {
     
+    let todoModel: GamificationCriticalMissionDataModel.TODOResponseModel
+    
+    let didSelectViewClub: (() -> ())
+    
     var body: some View {
         
         HStack {
@@ -29,12 +33,12 @@ struct GamificationCriticalMissionListItemView: View {
         }
     }
     private var missionTitleView: some View {
-        Text("Critical Thinking")
+        Text(todoModel.title)
             .appFont(.poppinsSemiBold, size: 14, weight: .semibold)
     }
     
     private var missionCategoryView: some View {
-        Text("Mission Category: Course")
+        Text(todoModel.assignmentType?.rawValue ?? "")
             .appFont(.poppinsRegular, size: 14)
     }
     
@@ -52,5 +56,8 @@ struct GamificationCriticalMissionListItemView: View {
 }
 
 #Preview {
-    GamificationCriticalMissionListItemView()
+    GamificationCriticalMissionListItemView(
+        todoModel: .preview,
+        didSelectViewClub: {}
+    )
 }

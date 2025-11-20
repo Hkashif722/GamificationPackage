@@ -8,14 +8,11 @@
 
 
 
-///---------------------------------` Profile Info Items`-------------------------------------------------
-///-------------------------------------------------
-///-------------------------------------------------
-
-
 import SwiftUI
 
 internal struct GamificationDashboardProfileItemsView: View {
+    
+    let userProfileDetail = GamificationClubTypeDataModel.shared.userProfileDetail
     
     var body: some View {
         
@@ -35,7 +32,7 @@ internal struct GamificationDashboardProfileItemsView: View {
     
     private var profileImageView: some View {
         SwiftUIUtility.ProfileImageView(
-            imageUrl: URL(string: ""),
+            imageUrl: userProfileDetail?.computedUseProlePictureURL,
             size: 82,
             profileBorderColor: .white,
             borderWidth: 5
@@ -65,23 +62,28 @@ internal struct GamificationDashboardProfileItemsView: View {
             
     }
     
+    @ViewBuilder
     private var profileNameView: some View {
-        Text("Ava Wilson")
-            .appFont(.poppinsBold, size: 12, weight: .bold)
-            .foregroundStyle(.white)
-            .padding(.init(top: 8, leading: 55, bottom: 8, trailing: 25))
-            .background(ColorUtility.primaryColor)
-            .clipShape(Capsule())
+        if let userName = userProfileDetail?.userName {
+            Text(userName)
+                .appFont(.poppinsBold, size: 12, weight: .bold)
+                .foregroundStyle(.white)
+                .padding(.init(top: 8, leading: 55, bottom: 8, trailing: 25))
+                .background(ColorUtility.primaryColor)
+                .clipShape(Capsule())
+        }
     }
     
-    
+    @ViewBuilder
     private var houseNameTextView: some View {
-        Text("Red House")
-            .appFont(.poppinsRegular, size: 12)
-            .foregroundStyle(ColorUtility.label)
-            .padding(.init(top: 5, leading: 45, bottom: 5, trailing: 15))
-            .background(.white)
-            .clipShape(Capsule())
+        if let house = userProfileDetail?.house {
+            Text(house)
+                .appFont(.poppinsRegular, size: 12)
+                .foregroundStyle(ColorUtility.label)
+                .padding(.init(top: 5, leading: 45, bottom: 5, trailing: 15))
+                .background(.white)
+                .clipShape(Capsule())
+        }
     }
     
 }

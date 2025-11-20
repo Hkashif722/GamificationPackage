@@ -9,14 +9,17 @@
 import SwiftUI
 
 struct GamificationLeaderboardUserInfoListView: View {
+    
+    let topRanking: [GamificationDashboardDataModel.LeaderBoardResponseModel.Ranking]
+    
     var body: some View {
         gamificationLeaderboardUserInfoListView
     }
     
     private var gamificationLeaderboardUserInfoListView: some View {
         ScrollView {
-            ForEach(0..<7) { _ in
-                GamificationLeaderboardUserInfoListItemView()
+            ForEach(Array(topRanking.enumerated()), id: \.element.id) { index, rank in
+                GamificationLeaderboardUserInfoListItemView(index: index + 1, rank: rank)
             }
         }
         .versionedContentMargins()
@@ -25,5 +28,7 @@ struct GamificationLeaderboardUserInfoListView: View {
 }
 
 #Preview {
-    GamificationLeaderboardUserInfoListView()
+    GamificationLeaderboardUserInfoListView(
+        topRanking: GamificationDashboardDataModel.LeaderBoardResponseModel.Ranking.previewArray
+    )
 }

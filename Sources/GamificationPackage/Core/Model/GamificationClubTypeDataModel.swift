@@ -23,6 +23,9 @@ final class GamificationClubTypeDataModel: ObservableObject {
     @Published var ranges: [GamificationDashboardDataModel.GamificationLevelResponseModel] = []
     
     
+    @Published var userProfileDetail: GamificationDashboardDataModel.UserProfileResponseModel?
+    
+    
     // MARK: - Configure Club Type Based on Points
     func configure(points: Int) {
         
