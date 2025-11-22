@@ -38,13 +38,13 @@ struct GamificationCriticalMissionListItemView: View {
     }
     
     private var missionCategoryView: some View {
-        Text(todoModel.assignmentType?.rawValue ?? "")
+        Text("Mission Category: \(todoModel.type ?? "")")
             .appFont(.poppinsRegular, size: 14)
     }
     
     private var viewClubViewButton: some View {
         SwiftUIUtility.RectangularIconButtonWithBorder(
-            title: "View Club",
+            title: "Launch",
             foregroundColor: Color(hex: "#00d6c0"),
             borderColor: Color(hex: "#00d6c0"),
             height: 35

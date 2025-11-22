@@ -25,4 +25,10 @@ internal struct APIConst {
     static let ContentPath = "https://content.gogetempowered.com"
     static let GetTodaysHappyHours = "HappyHour/GetTodaysHappyHours"
     static let toDoURN = "ToDoPriorityList/GetToDoList"
+    static let MiniMissionCount = "MyCourses/GetMissionCourses/count/mini"
+    static let GetMissionCourses = "MyCourses/GetMissionCourses/1/8/mini"
+    static let GetNormalCoursesCount = "MyCourses/GetMissionCourses/count/normal"
+    static let GetNormalCourses = "MyCourses/GetMissionCourses/1/8/normal"
+    static let GetBossCoursesCount = "MyCourses/GetMissionCourses/count/boss"
+    static let GetBossCourses = "MyCourses/GetMissionCourses/1/8/boss"
 }

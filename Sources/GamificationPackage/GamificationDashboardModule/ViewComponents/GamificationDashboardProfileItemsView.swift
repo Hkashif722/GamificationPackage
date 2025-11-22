@@ -33,7 +33,7 @@ internal struct GamificationDashboardProfileItemsView: View {
     private var profileImageView: some View {
         SwiftUIUtility.ProfileImageView(
             imageUrl: userProfileDetail?.computedUseProlePictureURL,
-            size: 82,
+            size: 81,
             profileBorderColor: .white,
             borderWidth: 5
         )
@@ -47,15 +47,15 @@ internal struct GamificationDashboardProfileItemsView: View {
             profileNameView
             houseNameTextView
         }
-        .offset(x: -50, y: -3)
+        .offset(x: -53, y: -3)
         .zIndex(1)
     }
     
     private var welcomeTextMessageView: some View {
         Text("WELCOME")
-            .appFont(.poppinsRegular, size: 12)
+            .appFont(.poppinsRegular, size: 12.4)
             .foregroundStyle(ColorUtility.label)
-            .padding(.init(top: 5, leading: 45, bottom: 5, trailing: 15))
+            .padding(.init(top: 5, leading: 48, bottom: 5, trailing: 15))
             .background(.white)
             .clipShape(Capsule())
            
@@ -64,34 +64,46 @@ internal struct GamificationDashboardProfileItemsView: View {
     
     @ViewBuilder
     private var profileNameView: some View {
-        if let userName = userProfileDetail?.userName {
-            Text(userName)
-                .appFont(.poppinsBold, size: 12, weight: .bold)
+//        if let userName = userProfileDetail?.userName {
+            Text("Kashif")
+            .appFont(.poppinsBold, size: 12.4, weight: .bold)
                 .foregroundStyle(.white)
-                .padding(.init(top: 8, leading: 55, bottom: 8, trailing: 25))
+                .padding(.init(top: 8, leading: 58, bottom: 8, trailing: 25))
                 .background(ColorUtility.primaryColor)
                 .clipShape(Capsule())
-        }
+//        }
     }
     
     @ViewBuilder
     private var houseNameTextView: some View {
-        if let house = userProfileDetail?.house {
-            Text(house)
-                .appFont(.poppinsRegular, size: 12)
+//        if let house = userProfileDetail?.house {
+            Text("Blue House")
+            .appFont(.poppinsRegular, size: 12.4)
                 .foregroundStyle(ColorUtility.label)
-                .padding(.init(top: 5, leading: 45, bottom: 5, trailing: 15))
+                .padding(.init(top: 5, leading: 48, bottom: 5, trailing: 15))
                 .background(.white)
                 .clipShape(Capsule())
-        }
+//        }
     }
     
 }
 
-#Preview {
-    ZStack {
-        GamificationDashboardBackgroundView()
-            .blur(radius: 3)
-        GamificationDashboardProfileItemsView()
+
+struct GamificationDashboardProfileItemsView_Preview: View {
+    
+    init() {
+        FontRegistrar.registerAllFonts()
     }
+    
+    var body: some View {
+        ZStack {
+            GamificationDashboardBackgroundView()
+                .blur(radius: 3)
+            GamificationDashboardProfileItemsView()
+        }
+    }
+}
+
+#Preview {
+    GamificationDashboardProfileItemsView_Preview()
 }
