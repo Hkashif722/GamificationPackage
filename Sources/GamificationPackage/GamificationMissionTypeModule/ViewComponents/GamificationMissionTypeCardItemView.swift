@@ -12,6 +12,8 @@ struct GamificationMissionTypeCardItemView: View {
     
     let missionTypeModel: GamificationMissionTypeDataModel.MissionTypeProgressEnum
     
+    let onPlayCLick: ((_ mission: GamificationMissionTypeDataModel.MissionTypeProgressEnum) -> ())
+    
     var body: some View {
         HStack(spacing: 16) {
             progressView
@@ -23,7 +25,7 @@ struct GamificationMissionTypeCardItemView: View {
     
     private var progressView: some View {
         SwiftUIUtility.CircularProgressView(
-            progress: 0.7,
+            progress: missionTypeModel.progress,
             gradientColors: missionTypeModel.getGradientColors,
             size: 60,
             textColor: .white
@@ -46,7 +48,7 @@ struct GamificationMissionTypeCardItemView: View {
     }
     
     private var missionCompletionStatusView: some View {
-        Text("COMPLETED: 0/6")
+        Text("COMPLETED: \(missionTypeModel.completedCount)/\(missionTypeModel.count)")
             .appFont(.poppinsMedium, size: 18)
             .foregroundColor(.white.opacity(0.8))
     }
@@ -57,7 +59,7 @@ struct GamificationMissionTypeCardItemView: View {
             foregroundColor: .white,
             borderColor: Color(hex: "#06C2C4"),
             height: 45,
-            action: { }
+            action: { onPlayCLick(missionTypeModel) }
         )
         .frame(width: 150, height: 45)
          
@@ -69,9 +71,21 @@ struct GamificationMissionTypeCardItemView: View {
 #Preview {
     ZStack {
         Color.black.ignoresSafeArea()
-        GamificationMissionTypeCardItemView(missionTypeModel: .bossMission)
+        GamificationMissionTypeCardItemView(
+            missionTypeModel: .bossMission(
+                model: GamificationDashboardDataModel.GamificationMissionResponseModel(
+                    totalMiniMission: 3,
+                    totalBossMission: 2,
+                    totalNormalMission: 5,
+                    completedMiniMission: 1,
+                    completedBossMission: 1,
+                    completedNormalMission: 2
+                ),
+                courses: GamificationMissionTypeDataModel.PreviewData.bossMission.courses
+            ),
+            onPlayCLick: { _ in }
+        )
     }
-    
 }
 
 

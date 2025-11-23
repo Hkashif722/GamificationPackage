@@ -9,39 +9,47 @@
 import SwiftUI
 
 struct GamificationMisionCardStackingListView: View {
-    struct ExampleCard: Identifiable {
-        let id = UUID()
-        let title: String
-        let color: Color
-    }
+    
+    let mission: GamificationMissionTypeDataModel.MissionTypeProgressEnum
+    
+    let onClickLaunch:( (_ mission: GamificationMissionTypeDataModel.MissionTypeProgressEnum) -> ())
 
     @State private var index = 1
     
-    let data = [
-        ExampleCard(title: "Mini Missions", color: .purple),
-        ExampleCard(title: "Gamification", color: .blue),
-        ExampleCard(title: "Web Dev", color: .indigo),
-        ExampleCard(title: "Backend API", color: .cyan)
-    ]
+    init(
+        mission: GamificationMissionTypeDataModel.MissionTypeProgressEnum,
+        onClickLaunch: @escaping (_ mission: GamificationMissionTypeDataModel.MissionTypeProgressEnum) -> ()
+    ) {
+        self.mission = mission
+        self.onClickLaunch = onClickLaunch
+        _index = State(initialValue: mission.courses.count > 1 ? 1 : 0)
+    }
     
     var body: some View {
         cardStackingListView
     }
     
+    @ViewBuilder
     private var cardStackingListView: some View {
-        VStack {
-            CarouselStackingView(
-                items: data, index: $index,
-                previousButton: { controlBackButtonView(
-                    iconName: "chevron.left",
-                    onClick: onPrevious
-                )},
-                nextButton: { controlBackButtonView(
-                    iconName: "chevron.right",
-                    onClick: onNext
-                )}
-            ) { item in
-                GamificationMisionCardStackingItemView(onClick: {})
+        if mission.courses.count > 0 {
+            VStack {
+                CarouselStackingView(
+                    items: mission.courses, index: $index,
+                    previousButton: { controlBackButtonView(
+                        iconName: "chevron.left",
+                        onClick: onPrevious
+                    )},
+                    nextButton: { controlBackButtonView(
+                        iconName: "chevron.right",
+                        onClick: onNext
+                    )}
+                ) { course in
+                    GamificationMisionCardStackingItemView(
+                        missionType: mission.rawValue,
+                        course: course,
+                        onClick: { onClickLaunch(mission) }
+                    )
+                }
             }
         }
     }
@@ -53,7 +61,7 @@ struct GamificationMisionCardStackingListView: View {
     }
     
     private func onNext() {
-        guard index < data.count - 1 else { return }
+        guard index < mission.courses.count - 1 else { return }
         index += 1
     }
     
@@ -90,6 +98,21 @@ extension GamificationMisionCardStackingListView {
     ZStack {
         GamificationDashboardBackgroundView()
             .blur(radius: 4)
-        GamificationMisionCardStackingListView()
+        GamificationMisionCardStackingListView(
+            mission: .miniMission(
+                model: .init(
+                    totalMiniMission: 3,
+                    totalBossMission: 2,
+                    totalNormalMission: 5,
+                    completedMiniMission: 1,
+                    completedBossMission: 0,
+                    completedNormalMission: 2
+                ),
+                courses: GamificationMissionTypeDataModel.PreviewData.sampleCourses
+            ),
+            onClickLaunch: { mission in
+                print("Launched mission: \(mission.rawValue)")
+            }
+        )
     }
 }

@@ -42,6 +42,8 @@ struct GamificationDashBoardView: View {
             .spring(response: 0.35, dampingFraction: 0.75),
             value: router.popup
         )
+        .fullSize()
+        .ignoresSafeArea()
     }
     
     // Dashboard content grouped so blur applies smoothly
@@ -54,7 +56,6 @@ struct GamificationDashBoardView: View {
             GamificationDashboardScoreView(score: gmDashBoardViewModel.myRankingResponseModel?.totalPoint)
             GamificationDashboardCentralMenuItemDeck(onAction: gmDashBoardViewModel.presentPopupView(_:))
         }
-        .fullSize()
         .task {
             await gmDashBoardViewModel.allApiCall()
         }

@@ -10,6 +10,7 @@ import SwiftUI
 
 struct GamificationMissionGridItemView: View {
     
+    let course: GamificationMissionTypeDataModel.Course
     let onClick: () -> ()
     
     var body: some View {
@@ -37,7 +38,7 @@ struct GamificationMissionGridItemView: View {
     }
     
     private var missionTitleView: some View {
-        Text("Podh12345")
+        Text(course.title)
             .appFont(.poppinsSemiBold, size: 14, weight: .semibold)
             .foregroundStyle(.white)
     }
@@ -51,20 +52,23 @@ struct GamificationMissionGridItemView: View {
     
     
     private var courseTitleView: some View {
-        Text("Mission Category Name")
+        Text(course.categoryName ?? "Uncategorized")
             .appFont(.poppinsRegular, size: 14)
+            .multilineTextAlignment(.leading)
             .foregroundStyle(.white)
+            .frame(maxWidth: .infinity, alignment: .leading)
     }
     
     
     private var courseTypeSegmentView: some View {
         SwiftUIUtility.IconWithText(
-            imageName: "ic_gm_course_type_classroom",
-            text: "Classroom",
+            imageName: course.parsedCourseType.iconName,
+            imageSize: .init(width: 20, height: 20),
+            text: course.parsedCourseType.displayName,
             isSystemImage: false,
+            font: .callout,
             textColor: .white
         )
-//        .frame(width: 120)
         .padding(.init(top: 2, leading: 8, bottom: 2, trailing: 8))
         .reusableGradientBackground(
             stops: [
@@ -78,7 +82,7 @@ struct GamificationMissionGridItemView: View {
     }
     
     private var rewardPointsInfoView: some View {
-        Text("You will get 10 reward points")
+        Text("You will get \(course.rewardPoint ?? 0) reward points")
             .appFont(.poppinsMedium, size: 12, weight: .medium)
             .foregroundStyle(ColorUtility.deepYellow)
     }
@@ -97,11 +101,11 @@ struct GamificationMissionGridItemView: View {
             foregroundColor: .white,
             
             borderColor: Color(hex: "#06C2C4"),
-            height: 30,
+            height: 25,
             font: .callout,
             action: onClick
         )
-        .frame(width: 70)
+        .frame(width: 65)
     }
     
     private var backgroundFrostView: some View {
@@ -116,6 +120,9 @@ struct GamificationMissionGridItemView: View {
     ZStack {
         GamificationDashboardBackgroundView()
             .blur(radius: 4)
-        GamificationMissionGridItemView(onClick: {})
+        GamificationMissionGridItemView(
+            course: GamificationMissionTypeDataModel.PreviewData.sampleCourse,
+            onClick: {}
+        )
     }
 }

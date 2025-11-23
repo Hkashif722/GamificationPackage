@@ -16,7 +16,7 @@ internal class GamificationDashboardViewModel: BaseRoutableNavModel {
     @Published var myRankingResponseModel: GamificationDashboardDataModel.LeaderBoardResponseModel.Ranking?
     @Published var topRankingResponseModel: [GamificationDashboardDataModel.LeaderBoardResponseModel.Ranking] = []
     @Published var houseMasters: [GamificationDashboardDataModel.GETALLHouseMasterResponseModel] = []
-    @Published var missionCount: GamificationDashboardDataModel.GamificationMissionResponseModel?
+    @Published var missionCount: GamificationDashboardDataModel.GamificationMissionResponseModel = .default
     @Published var rewardPoints: GamificationDashboardDataModel.HouseRewardPointCountResponseModel?
     
     override init(router: Router) {
@@ -164,10 +164,16 @@ internal extension GamificationDashboardViewModel {
             
             
         case .mission:
-            GamificationMissionTypeView()
+            GamificationMissionTypeView(router: self.router, missionCounts: self.missionCount)
+            
+        case .missionCardStacking(let mission):
+            GamificationMissionCardStackingView(router: self.router, mission: mission)
+            
+        case .missionGridList(let mission):
+            GamificationMissionGridContentView(router: self.router, mission: mission)
             
         default:
-            GamificationMissionCardStackingView()
+            GamificationMissionCardStackingView(router: self.router, mission: .bossMission(model: .default, courses: []))
         }
         
     }

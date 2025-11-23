@@ -132,6 +132,19 @@ internal struct GamificationDashboardDataModel {
         let completedMiniMission: Int
         let completedBossMission: Int
         let completedNormalMission: Int
+        
+        enum CodingKeys: CodingKey {
+            case totalMiniMission
+            case totalBossMission
+            case totalNormalMission
+            case completedMiniMission
+            case completedBossMission
+            case completedNormalMission
+        }
+        
+        static var `default`: Self {
+            .init(totalMiniMission: 0, totalBossMission: 0, totalNormalMission: 0, completedMiniMission: 0, completedBossMission: 0, completedNormalMission: 0)
+        }
     }
     
     struct HouseRewardPointCountResponseModel: Codable {

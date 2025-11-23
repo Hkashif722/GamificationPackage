@@ -19,6 +19,7 @@ internal struct GamificationDashboardScoreView: View {
             scoreView
         }
         .bottomTrailing()
+        .offset(y: -10)
         .ignoresSafeArea(edges: .trailing)
         
     }
@@ -59,4 +60,6 @@ internal struct GamificationDashboardScoreView: View {
         GamificationDashboardBackgroundView()
         GamificationDashboardScoreView(score: 125)
     }
+    .fullSize()
+    .ignoresSafeArea()
 }

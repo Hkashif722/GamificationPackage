@@ -11,6 +11,9 @@ enum Route: Hashable {
     case criticalMission
     case leaderboard
     case mission
+    case missionCards
+    case missionCardStacking(mission: GamificationMissionTypeDataModel.MissionTypeProgressEnum)
+    case missionGridList(mission: GamificationMissionTypeDataModel.MissionTypeProgressEnum)
     case dailyLoginBonus
     case campaigns
     case campaignLeaderboard

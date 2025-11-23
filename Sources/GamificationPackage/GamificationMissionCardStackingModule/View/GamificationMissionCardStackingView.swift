@@ -10,11 +10,25 @@ import SwiftUI
 
 struct GamificationMissionCardStackingView: View {
     
+    @StateObject private var missionCardViewModel: GamificationMissionCardViewModel
+    
+    init(router: Router, mission: GamificationMissionTypeDataModel.MissionTypeProgressEnum) {
+       _missionCardViewModel = StateObject(
+        wrappedValue: GamificationMissionCardViewModel(
+            router: router,
+            mission: mission
+        )
+       )
+    }
+    
     var body: some View {
         ZStack(alignment: .topTrailing) {
             closeButtonView
             ZStack {
                 gamificationMissionCardStackingView
+                GamificationMisionCardStackingViewAllButtonView(
+                    onClickViewAll: missionCardViewModel.handleViewAll
+                )
             }
             .center()
             .ignoresSafeArea()
@@ -25,7 +39,10 @@ struct GamificationMissionCardStackingView: View {
     private var gamificationMissionCardStackingView: some View {
         VStack(spacing: 12) {
             missionTitleView
-            GamificationMisionCardStackingListView()
+            GamificationMisionCardStackingListView(
+                mission: missionCardViewModel.mission,
+                onClickLaunch: missionCardViewModel.handleOnLaunchMission(_:)
+            )
         }
         .padding()
         .frame(maxWidth: 800, maxHeight: 350)
@@ -40,7 +57,7 @@ struct GamificationMissionCardStackingView: View {
     }
     
     private var closeButtonView: some View {
-        Button(action: { }) {
+        Button(action: missionCardViewModel.dismissPopup) {
             Image("ic_gm_close", bundle: .module)
                 .frame(width: 45, height: 45)
         }
@@ -53,6 +70,19 @@ struct GamificationMissionCardStackingView: View {
     ZStack {
         GamificationDashboardBackgroundView()
             .blur(radius: 4)
-        GamificationMissionCardStackingView()
+        GamificationMissionCardStackingView(
+            router: Router(),
+            mission: .miniMission(
+                model: .init(
+                    totalMiniMission: 3,
+                    totalBossMission: 2,
+                    totalNormalMission: 5,
+                    completedMiniMission: 1,
+                    completedBossMission: 0,
+                    completedNormalMission: 2
+                ),
+                courses: GamificationMissionTypeDataModel.PreviewData.sampleCourses
+            )
+        )
     }
 }

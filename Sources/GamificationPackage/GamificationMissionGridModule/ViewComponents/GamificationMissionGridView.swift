@@ -9,28 +9,17 @@ import SwiftUI
 
 struct GamificationMissionGridView: View {
     
-    struct ExampleCard: Identifiable, Hashable {
-        let id = UUID()
-        let title: String
-        let color: Color
-    }
-    
-    let data = [
-        ExampleCard(title: "Mini Missions", color: .purple),
-        ExampleCard(title: "Gamification", color: .blue),
-        ExampleCard(title: "Web Dev", color: .indigo),
-        ExampleCard(title: "Backend API", color: .cyan)
-    ]
+    let courses: [GamificationMissionTypeDataModel.Course]
     
     
     var body: some View {
         
         DynamicGridByScreenWidthWrapper(
-            items: data,
+            items: courses,
             minimumWidth: 300,
             
         ) { item in
-            GamificationMissionGridItemView(onClick: {})
+            GamificationMissionGridItemView(course: item, onClick: {})
         }
     }
     
@@ -40,7 +29,10 @@ struct GamificationMissionGridView: View {
     ZStack {
         GamificationDashboardBackgroundView()
             .blur(radius: 4)
-        GamificationMissionGridView()
+        GamificationMissionGridView(
+            courses: GamificationMissionTypeDataModel.PreviewData.sampleCourses
+        )
     }
 }
+
 

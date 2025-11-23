@@ -9,6 +9,12 @@ import SwiftUI
 
 struct GamificationMissionGridBottomControlView: View {
     
+    let paginationText: String
+    let canGoToPrevious: Bool
+    let canGoToNext: Bool
+    let onPrevious: () -> Void
+    let onNext: () -> Void
+    
     var body: some View {
         
         VStack {
@@ -22,15 +28,23 @@ struct GamificationMissionGridBottomControlView: View {
     
     private var campaignHeaderControlView: some View {
         HStack(spacing: 16) {
-            controlBackButtonView(iconName: "chevron.left", onClick: {})
+            controlBackButtonView(
+                iconName: "chevron.left",
+                isEnabled: canGoToPrevious,
+                onClick: onPrevious
+            )
             paginationInfoView
-            controlBackButtonView(iconName: "chevron.right", onClick: {})
+            controlBackButtonView(
+                iconName: "chevron.right",
+                isEnabled: canGoToNext,
+                onClick: onNext
+            )
         }
     }
     
     
     private var paginationInfoView: some View {
-        Text("1-4 / 10")
+        Text(paginationText)
             .appFont(.poppinsSemiBold, size: 18, weight: .semibold)
             .foregroundStyle(Color(hex: "#00F1D8"))
     }
@@ -41,7 +55,11 @@ struct GamificationMissionGridBottomControlView: View {
 //MARK: Utility
 extension GamificationMissionGridBottomControlView {
     
-    private func controlBackButtonView(iconName: String, onClick: @escaping () -> ()) -> some View {
+    private func controlBackButtonView(
+        iconName: String,
+        isEnabled: Bool,
+        onClick: @escaping () -> ()
+    ) -> some View {
         
         SwiftUIUtility.RectangularGradientButton(
             iconName: iconName,
@@ -59,10 +77,18 @@ extension GamificationMissionGridBottomControlView {
             action: onClick
         )
         .frame(width: 30)
+        .opacity(isEnabled ? 1.0 : 0.4)
+        .disabled(!isEnabled)
     }
     
 }
 
 #Preview {
-    GamificationMissionGridBottomControlView()
+    GamificationMissionGridBottomControlView(
+        paginationText: "1-4 / 10",
+        canGoToPrevious: false,
+        canGoToNext: true,
+        onPrevious: {},
+        onNext: {}
+    )
 }

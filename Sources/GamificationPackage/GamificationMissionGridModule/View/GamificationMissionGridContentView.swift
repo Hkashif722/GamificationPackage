@@ -10,20 +10,31 @@ import SwiftUI
 
 struct GamificationMissionGridContentView: View {
     
-    init() {
-        FontRegistrar.registerAllFonts()
+    @StateObject private var missionGridViewModel: GamificationMissionGridViewModel
+    
+    init(router: Router, mission: GamificationMissionTypeDataModel.MissionTypeProgressEnum) {
+       _missionGridViewModel = StateObject(
+        wrappedValue: GamificationMissionGridViewModel(
+            router: router,
+            mission: mission
+        )
+       )
     }
     
     var body: some View {
         ZStack(alignment: .top) {
             messionTitleView
-            ZStack(alignment: .topTrailing) {
-                closeButtonView
-                ZStack {
-                    gamificationMissionGridContentView
+            ZStack(alignment: .bottomTrailing) {
+                ZStack(alignment: .topTrailing) {
+                    closeButtonView
+                    ZStack {
+                        gamificationMissionGridContentView
+                    }
+                    .center()
+                    .ignoresSafeArea()
+                    
                 }
-                .center()
-                .ignoresSafeArea() 
+                bottomControlView
             }
         }
         
@@ -32,10 +43,22 @@ struct GamificationMissionGridContentView: View {
     private var gamificationMissionGridContentView: some View {
         VStack(spacing: 8) {
 //            messionTitleView
-            GamificationMissionGridView()
-            GamificationMissionGridBottomControlView()
+            GamificationMissionGridView(courses: missionGridViewModel.currentPageCourses)
+            
         }
         .padding(.init(top: 40, leading: 10, bottom: 0, trailing: 25))
+        .scaleEffect(x: 0.9)
+    }
+    
+    private var bottomControlView: some View {
+        GamificationMissionGridBottomControlView(
+            paginationText: missionGridViewModel.paginationText,
+            canGoToPrevious: missionGridViewModel.canGoToPrevious,
+            canGoToNext: missionGridViewModel.canGoToNext,
+            onPrevious:missionGridViewModel.goToPreviousPage,
+            onNext: missionGridViewModel.goToNextPage
+        )
+        .padding(.init(top: 0, leading: 0, bottom: 10, trailing: 30))
     }
     
     
@@ -47,7 +70,7 @@ struct GamificationMissionGridContentView: View {
     }
     
     private var closeButtonView: some View {
-        Button(action: { }) {
+        Button(action: missionGridViewModel.dismissPopup) {
             Image("ic_gm_close", bundle: .module)
                 .frame(width: 45, height: 45)
         }
@@ -60,6 +83,14 @@ struct GamificationMissionGridContentView: View {
     ZStack {
         GamificationDashboardBackgroundView()
             .blur(radius: 4)
-        GamificationMissionGridContentView()
+        GamificationMissionGridContentView(
+            router: Router(),
+            mission: .miniMission(
+                model: .default,
+                courses: GamificationMissionTypeDataModel.PreviewData.sampleCourses
+            )
+        )
     }
+    .fullSize()
+    .ignoresSafeArea()
 }

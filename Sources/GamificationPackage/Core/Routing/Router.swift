@@ -21,4 +21,15 @@ final class Router: ObservableObject {
     func dismissPopup() {
         popup = nil
     }
+    
+    @MainActor
+    func swapPopup(_ newRoute: Route, delay: Double = 0.3) {
+        dismissPopup()
+        Task {
+            try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
+            await MainActor.run {
+                presentPopup(newRoute)
+            }
+        }
+    }
 }

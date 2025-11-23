@@ -26,7 +26,7 @@ internal struct GamificationDashboardProfileItemsView: View {
             }
         }
         .bottomLeading()
-        .offset(y: -10)
+        .offset(x: 15,y: -10)
         .ignoresSafeArea(edges: .bottom)
     }
     
@@ -64,26 +64,26 @@ internal struct GamificationDashboardProfileItemsView: View {
     
     @ViewBuilder
     private var profileNameView: some View {
-//        if let userName = userProfileDetail?.userName {
-            Text("Kashif")
+        if let userName = userProfileDetail?.userName {
+            Text(userName)
             .appFont(.poppinsBold, size: 12.4, weight: .bold)
                 .foregroundStyle(.white)
                 .padding(.init(top: 8, leading: 58, bottom: 8, trailing: 25))
                 .background(ColorUtility.primaryColor)
                 .clipShape(Capsule())
-//        }
+        }
     }
     
     @ViewBuilder
     private var houseNameTextView: some View {
-//        if let house = userProfileDetail?.house {
-            Text("Blue House")
+        if let house = userProfileDetail?.house {
+            Text(house)
             .appFont(.poppinsRegular, size: 12.4)
                 .foregroundStyle(ColorUtility.label)
                 .padding(.init(top: 5, leading: 48, bottom: 5, trailing: 15))
                 .background(.white)
                 .clipShape(Capsule())
-//        }
+        }
     }
     
 }
@@ -101,6 +101,8 @@ struct GamificationDashboardProfileItemsView_Preview: View {
                 .blur(radius: 3)
             GamificationDashboardProfileItemsView()
         }
+        .fullSize()
+        .ignoresSafeArea()
     }
 }
 

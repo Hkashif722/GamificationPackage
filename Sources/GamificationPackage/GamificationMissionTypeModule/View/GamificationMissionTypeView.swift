@@ -10,6 +10,14 @@ import SwiftUI
 
 struct GamificationMissionTypeView: View {
     
+    @StateObject var missionTypeViewModel: GamificationMissionTypeViewModel
+    
+    init(router: Router, missionCounts: GamificationDashboardDataModel.GamificationMissionResponseModel) {
+        _missionTypeViewModel = StateObject(
+            wrappedValue: GamificationMissionTypeViewModel(router: router, missionCount: missionCounts)
+        )
+    }
+    
     var body: some View {
         ZStack(alignment: .topTrailing) {
             closeButtonView
@@ -19,13 +27,19 @@ struct GamificationMissionTypeView: View {
             .center()
             .ignoresSafeArea()
         }
+        .task {
+            await missionTypeViewModel.fetchAllMissionData()
+        }
     }
     
     
     private var gamificationMissionTypeView: some View {
         VStack(spacing: 8) {
             messionTitleView
-            GamificationMissionTypeCardListView()
+            GamificationMissionTypeCardListView(
+                missions: missionTypeViewModel.missions,
+                onPlayCLick: missionTypeViewModel.handleMissionPlay(_:)
+            )
         }
         .padding(.bottom)
     }
@@ -38,7 +52,7 @@ struct GamificationMissionTypeView: View {
     }
     
     private var closeButtonView: some View {
-        Button(action: { }) {
+        Button(action: missionTypeViewModel.dismissPopup) {
             Image("ic_gm_close", bundle: .module)
                 .frame(width: 45, height: 45)
         }
@@ -53,6 +67,16 @@ struct GamificationMissionTypeView: View {
     ZStack {
         GamificationDashboardBackgroundView()
             .blur(radius: 4)
-        GamificationMissionTypeView()
+        GamificationMissionTypeView(
+            router: Router(),
+            missionCounts: GamificationDashboardDataModel.GamificationMissionResponseModel(
+                totalMiniMission: 5,
+                totalBossMission: 3,
+                totalNormalMission: 10,
+                completedMiniMission: 2,
+                completedBossMission: 1,
+                completedNormalMission: 5
+            )
+        )
     }
 }

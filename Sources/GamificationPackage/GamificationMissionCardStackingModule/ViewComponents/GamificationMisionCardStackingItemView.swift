@@ -8,20 +8,10 @@
 
 import SwiftUI
 
-struct GamificationMisionCardStackingItemView: View {
+internal struct GamificationMisionCardStackingItemView: View {
     
-    struct ExampleCard: Identifiable {
-        let id = UUID()
-        let title: String
-        let color: Color
-    }
-    
-    let data = [
-        ExampleCard(title: "Mini Missions", color: .purple),
-        ExampleCard(title: "Gamification", color: .blue),
-        ExampleCard(title: "Web Dev", color: .indigo),
-        ExampleCard(title: "Backend API", color: .cyan)
-    ]
+    let missionType: String
+    let course: GamificationMissionTypeDataModel.Course
     
     let onClick: () -> ()
     
@@ -36,7 +26,7 @@ struct GamificationMisionCardStackingItemView: View {
         VStack {
             missionTitleView
             SwiftUIUtility.GradientDivider()
-            courseInfoView
+            courseTitleView
             courseTypeSegmentView
             rewardPointsInfoView
             launchButtonView
@@ -52,33 +42,27 @@ struct GamificationMisionCardStackingItemView: View {
     }
     
     
-    private var courseInfoView: some View {
-        VStack {
-            missionTitleView
-            courseTitleView
-        }
-    }
     private var missionTitleView: some View {
-        Text("Mini Mission")
+        Text(missionType)
             .appFont(.poppinsBold, size: 18, weight: .bold)
             .foregroundStyle(.white)
     }
     
     private var courseTitleView: some View {
-        Text("AIML")
+        Text(course.title ?? "")
             .appFont(.poppinsSemiBold, size: 16, weight: .semibold)
             .foregroundStyle(.white)
     }
     
     private var courseCategoryView: some View {
-        Text("Software, IT and Web Development")
+        Text(course.categoryName ?? "")
             .appFont(.poppinsRegular, size: 14)
     }
     
     private var courseTypeSegmentView: some View {
         SwiftUIUtility.IconWithText(
             imageName: "ic_gm_course_type_classroom",
-            text: "Classroom",
+            text: course.courseType ?? "Classroom",
             isSystemImage: false,
             textColor: .white
         )
@@ -96,7 +80,7 @@ struct GamificationMisionCardStackingItemView: View {
     }
     
     private var rewardPointsInfoView: some View {
-        Text("You will get 10 reward points")
+        Text("You will get \(course.rewardPoint ?? 0) reward points")
             .appFont(.poppinsMedium, size: 16, weight: .medium)
             .foregroundStyle(.white)
     }
@@ -131,6 +115,10 @@ struct GamificationMisionCardStackingItemView: View {
     ZStack {
         GamificationDashboardBackgroundView()
             .blur(radius: 4)
-        GamificationMisionCardStackingItemView(onClick: {})
+        GamificationMisionCardStackingItemView(
+            missionType: "Mini Mission",
+            course: GamificationMissionTypeDataModel.PreviewData.sampleCourse,
+            onClick: {}
+        )
     }
 }
