@@ -213,6 +213,17 @@ internal struct CustomViewModifier {
                 )
         }
     }
+    
+    
+    struct DisabledOpacityModifier: ViewModifier {
+        let isDisabled: Bool
+
+        func body(content: Content) -> some View {
+            content
+                .opacity(isDisabled ? 0.5 : 1.0) // Apply reduced opacity if disabled
+                .disabled(isDisabled)           // Disable interaction if needed
+        }
+    }
 
 
 }
@@ -367,6 +378,11 @@ internal extension View {
         ]
         return self.modifier(CustomViewModifier.GradientBackgroundModifier(stops: gradientStops, startPoint: startPoint, endPoint: endPoint))
     }
+   
+    func disabledWithOpacity(_ isDisabled: Bool) -> some View {
+        self.modifier(CustomViewModifier.DisabledOpacityModifier(isDisabled: isDisabled))
+    }
+    
     
     
 }

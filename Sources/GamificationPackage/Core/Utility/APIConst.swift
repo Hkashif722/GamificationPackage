@@ -31,4 +31,5 @@ internal struct APIConst {
     static let GetNormalCourses = "MyCourses/GetMissionCourses/1/8/normal"
     static let GetBossCoursesCount = "MyCourses/GetMissionCourses/count/boss"
     static let GetBossCourses = "MyCourses/GetMissionCourses/1/8/boss"
+    static let GetCampaignApplicabilitySetting = "Courses/GetCampaignApplicabilitySetting"
 }

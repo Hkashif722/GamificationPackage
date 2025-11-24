@@ -10,6 +10,8 @@ import SwiftUI
 
 struct GamificationClubLevelItemView: View {
     
+    let gamificationClubTypeModel: GamificationClubTypeDataModel
+    
     let clubItemSolidBackgroundColor: Color = Color(hex: "#2D0041")
     
     let clubType: GamificationClubTypeDataModel.ClubType
@@ -68,7 +70,7 @@ struct GamificationClubLevelItemView: View {
     
     
     private var clanStickerView: some View {
-        Image(clubType.clubLevelSticker, bundle: .module)
+        Image(clubType.clanLevelSticker, bundle: .module)
             .resizable()
             .scaledToFit()
             .frame(width: 85, height: 85)
@@ -92,7 +94,7 @@ struct GamificationClubLevelItemView: View {
     }
     
     private var scoreDataView: some View {
-        Text("5-50")
+        Text(gamificationClubTypeModel.getRangeText(clubType))
             .foregroundStyle(.white)
     }
     
@@ -114,7 +116,7 @@ struct GamificationClubLevelItemView: View {
     
     @ViewBuilder
     private var lockedOverlayView: some View {
-        if isClubLocked {
+        if gamificationClubTypeModel.isClubLocked(clubType) {
             ZStack {
                 Color.black.opacity(0.4)
                 
@@ -128,5 +130,9 @@ struct GamificationClubLevelItemView: View {
 }
 
 #Preview {
-    GamificationClubLevelItemView(clubType: .master, isClubLocked: true)
+    GamificationClubLevelItemView(
+        gamificationClubTypeModel: .shared,
+        clubType: .master,
+        isClubLocked: true
+    )
 }

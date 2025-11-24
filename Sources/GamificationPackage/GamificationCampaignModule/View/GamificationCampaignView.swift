@@ -10,6 +10,14 @@ import SwiftUI
 
 struct GamificationCampaignView: View {
     
+    @StateObject private var campaignViewModel: GamificationCampaignViewModel
+    
+    init(router: Router, campaignCourseData: [GamificationDashboardDataModel.GroupedCampaign]) {
+        _campaignViewModel = StateObject(
+            wrappedValue: GamificationCampaignViewModel(router: router, campaignCourseData: campaignCourseData)
+        )
+    }
+    
     var body: some View {
         ZStack(alignment: .topTrailing) {
             closeButtonView
@@ -25,7 +33,13 @@ struct GamificationCampaignView: View {
         VStack(spacing: 8) {
             campaignTitleView
             VStack {
-                GamificationCampaignHeaderControlView()
+                GamificationCampaignHeaderControlView(
+                    campaignModel: campaignViewModel.getCurrentCampaign,
+                    hasPrevious: campaignViewModel.hasPreviousPage,
+                    hasNext: campaignViewModel.hasNextPage,
+                    onPreviousClick: campaignViewModel.previousPage,
+                    onNextClick: campaignViewModel.nextPage
+                )
                 GamificationCampagnListView()
                 SwiftUIUtility.GradientDivider()
                 GamificationCampaignBottomControlView()
@@ -62,6 +76,9 @@ struct GamificationCampaignView: View {
     ZStack {
         GamificationDashboardBackgroundView()
             .blur(radius: 4)
-        GamificationCampaignView()
+        GamificationCampaignView(
+            router: Router(),
+            campaignCourseData: GamificationDashboardDataModel.GroupedCampaign.previewCampaigns
+        )
     }
 }

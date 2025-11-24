@@ -10,6 +10,12 @@ import SwiftUI
 
 struct GamificationCampaignHeaderControlView: View {
     
+    let campaignModel: GamificationDashboardDataModel.GroupedCampaign?
+    let hasPrevious: Bool
+    let hasNext: Bool
+    let onPreviousClick: () -> ()
+    let onNextClick: () -> ()
+    
     var body: some View {
         
         VStack {
@@ -23,9 +29,11 @@ struct GamificationCampaignHeaderControlView: View {
     
     private var campaignHeaderControlView: some View {
         HStack(spacing: 16) {
-            controlBackButtonView(iconName: "chevron.left", onClick: {})
+            controlBackButtonView(iconName: "chevron.left", onClick: onPreviousClick)
+                .disabledWithOpacity(!hasPrevious)
             headerInfoView
-            controlBackButtonView(iconName: "chevron.right", onClick: {})
+            controlBackButtonView(iconName: "chevron.right", onClick: onNextClick)
+                .disabledWithOpacity(!hasNext)
         }
     }
     
@@ -38,15 +46,18 @@ struct GamificationCampaignHeaderControlView: View {
     }
     
     private var campaignNameView: some View {
-        Text("1.2025-Camp C01 ")
+        Text(campaignModel?.name ?? "")
             .appFont(.poppinsSemiBold, size: 18, weight: .semibold)
             .foregroundStyle(Color(hex: "#00F1D8"))
     }
     
+    @ViewBuilder
     private var campaignDateRangView: some View {
-        Text("(Apr 28,2025- Apr 30,2025)")
-            .appFont(.poppinsRegular, size: 14)
-            .foregroundStyle(.white)
+        if let startDate = campaignModel?.startDate, let endDate = campaignModel?.endDate {
+            Text("\(startDate) - \(endDate)")
+                .appFont(.poppinsRegular, size: 14)
+                .foregroundStyle(.white)
+        }
     }
 
 }
@@ -78,5 +89,11 @@ extension GamificationCampaignHeaderControlView {
 }
 
 #Preview {
-    GamificationCampaignHeaderControlView()
+    GamificationCampaignHeaderControlView(
+        campaignModel: .previewSingle,
+        hasPrevious: true,
+        hasNext: true,
+        onPreviousClick: {},
+        onNextClick: {}
+    )
 }

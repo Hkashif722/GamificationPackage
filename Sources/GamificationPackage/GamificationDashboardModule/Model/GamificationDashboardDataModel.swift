@@ -118,11 +118,20 @@ internal struct GamificationDashboardDataModel {
         let logoName: String
     }
     
-    struct GamificationLevelResponseModel: Codable, Identifiable {
+    struct GamificationLevelResponseModel: Codable, Identifiable, Comparable {
         let id: Int
         let description: String
         let minPoint: Int
         let maxPoint: Int
+        
+        static func < (lhs: GamificationLevelResponseModel, rhs: GamificationLevelResponseModel) -> Bool {
+            if lhs.minPoint == rhs.minPoint {
+                return lhs.id < rhs.id  // Secondary sort by id
+            }
+            
+            return lhs.id < rhs.id 
+        }
+        
     }
 
     struct GamificationMissionResponseModel: Codable {
@@ -225,6 +234,7 @@ internal extension GamificationDashboardDataModel {
         case missionCount
         case rewardPointCount
         case getProfileDetail
+        case getCampaignData
         // MARK: - PATH
         var path: String {
             switch self {
@@ -270,6 +280,13 @@ internal extension GamificationDashboardDataModel {
                     APIConst.versionAPI,
                     APIConst.GetUserProfile // confirm if correct
                 ].joined(separator: "/")
+                
+            case .getCampaignData:
+                return [
+                    APIConst.courseBaseUrl,
+                    APIConst.versionAPI,
+                    APIConst.GetCampaignApplicabilitySetting 
+                ].joined(separator: "/")
             }
         }
         
@@ -302,6 +319,240 @@ internal extension GamificationDashboardDataModel {
                 return nil
             }
         }
+    }
+}
+
+
+extension GamificationDashboardDataModel {
+    // MARK: - Flat Response Model
+    struct CampaignCourseItem: Codable {
+        let campaignId: Int
+        let campaignName: String
+        let startDate: String
+        let endDate: String
+        let courseId: Int
+        let courseCode: String
+        let courseTitle: String
+        let courseRewardPoints: Int
+        let campaignRewardPoints: Int
+    }
+
+    // MARK: - Grouped Models
+    struct GroupedCampaign: Identifiable {
+        let id: Int
+        let name: String
+        let startDate: String
+        let endDate: String
+        let rewardPoints: Int
+        let courses: [Course]
+        
+        struct Course: Identifiable {
+            let id: Int
+            let code: String
+            let title: String
+            let rewardPoints: Int
+        }
+    }
+}
+
+
+// MARK: - Grouping Extension
+extension Array where Element == GamificationDashboardDataModel.CampaignCourseItem {
+    func groupedByCampaign() -> [GamificationDashboardDataModel.GroupedCampaign] {
+        let grouped = Dictionary(grouping: self) { $0.campaignId }
+        
+        return grouped.compactMap { (campaignId, items) -> GamificationDashboardDataModel.GroupedCampaign? in
+            guard let first = items.first else { return nil }
+            
+            let courses = items.map { item in
+                GamificationDashboardDataModel.GroupedCampaign.Course(
+                    id: item.courseId,
+                    code: item.courseCode,
+                    title: item.courseTitle,
+                    rewardPoints: item.courseRewardPoints
+                )
+            }
+            
+            return GamificationDashboardDataModel.GroupedCampaign(
+                id: campaignId,
+                name: first.campaignName,
+                startDate: first.startDate,
+                endDate: first.endDate,
+                rewardPoints: first.campaignRewardPoints,
+                courses: courses
+            )
+        }
+        .sorted { $0.id < $1.id }
+    }
+}
+
+// MARK: - Preview Data
+extension GamificationDashboardDataModel.CampaignCourseItem {
+    static var previewItems: [GamificationDashboardDataModel.CampaignCourseItem] {
+        [
+            // Campaign 1
+            GamificationDashboardDataModel.CampaignCourseItem(
+                campaignId: 1,
+                campaignName: "Winter Learning Sprint",
+                startDate: "2025-11-17T00:00:00",
+                endDate: "2025-12-01T00:00:00",
+                courseId: 2537,
+                courseCode: "coursera_Specialization~FoGfNV5WEeWh-woqJ8MDKQ",
+                courseTitle: "TESOL Certificate, Part 1: Teach English Now!",
+                courseRewardPoints: 20,
+                campaignRewardPoints: 50
+            ),
+            GamificationDashboardDataModel.CampaignCourseItem(
+                campaignId: 1,
+                campaignName: "Winter Learning Sprint",
+                startDate: "2025-11-17T00:00:00",
+                endDate: "2025-12-01T00:00:00",
+                courseId: 3278,
+                courseCode: "FoGfNV5WEeWh-woqJ8MDKQ",
+                courseTitle: "Advanced English Communication Skills",
+                courseRewardPoints: 25,
+                campaignRewardPoints: 50
+            ),
+            
+            // Campaign 2
+            GamificationDashboardDataModel.CampaignCourseItem(
+                campaignId: 2,
+                campaignName: "Data Science Challenge",
+                startDate: "2025-11-21T00:00:00",
+                endDate: "2025-12-24T00:00:00",
+                courseId: 2542,
+                courseCode: "coursera_Specialization~ZmRNDv6LEeqxFw7dZceVSw",
+                courseTitle: "Introducción a la Ciencia de Datos",
+                courseRewardPoints: 30,
+                campaignRewardPoints: 100
+            ),
+            GamificationDashboardDataModel.CampaignCourseItem(
+                campaignId: 2,
+                campaignName: "Data Science Challenge",
+                startDate: "2025-11-21T00:00:00",
+                endDate: "2025-12-24T00:00:00",
+                courseId: 2543,
+                courseCode: "coursera_Specialization~_u-5WC22EeandQ6BurPvEQ",
+                courseTitle: "Machine Learning Fundamentals",
+                courseRewardPoints: 40,
+                campaignRewardPoints: 100
+            ),
+            GamificationDashboardDataModel.CampaignCourseItem(
+                campaignId: 2,
+                campaignName: "Data Science Challenge",
+                startDate: "2025-11-21T00:00:00",
+                endDate: "2025-12-24T00:00:00",
+                courseId: 18532,
+                courseCode: "8000",
+                courseTitle: "Python for Data Analysis",
+                courseRewardPoints: 35,
+                campaignRewardPoints: 100
+            ),
+            
+            // Campaign 3
+            GamificationDashboardDataModel.CampaignCourseItem(
+                campaignId: 3,
+                campaignName: "Professional Development Week",
+                startDate: "2025-11-24T00:00:00",
+                endDate: "2025-12-08T00:00:00",
+                courseId: 19969,
+                courseCode: "8912",
+                courseTitle: "Leadership and Management Skills",
+                courseRewardPoints: 50,
+                campaignRewardPoints: 75
+            ),
+            GamificationDashboardDataModel.CampaignCourseItem(
+                campaignId: 3,
+                campaignName: "Professional Development Week",
+                startDate: "2025-11-24T00:00:00",
+                endDate: "2025-12-08T00:00:00",
+                courseId: 18868,
+                courseCode: "7494",
+                courseTitle: "Effective Communication in the Workplace",
+                courseRewardPoints: 25,
+                campaignRewardPoints: 75
+            )
+        ]
+    }
+}
+
+extension GamificationDashboardDataModel.GroupedCampaign {
+    static var previewCampaigns: [GamificationDashboardDataModel.GroupedCampaign] {
+        [
+            GamificationDashboardDataModel.GroupedCampaign(
+                id: 1,
+                name: "Winter Learning Sprint",
+                startDate: "2025-11-17T00:00:00",
+                endDate: "2025-12-01T00:00:00",
+                rewardPoints: 50,
+                courses: [
+                    GamificationDashboardDataModel.GroupedCampaign.Course(
+                        id: 2537,
+                        code: "coursera_Specialization~FoGfNV5WEeWh-woqJ8MDKQ",
+                        title: "TESOL Certificate, Part 1: Teach English Now!",
+                        rewardPoints: 20
+                    ),
+                    GamificationDashboardDataModel.GroupedCampaign.Course(
+                        id: 3278,
+                        code: "FoGfNV5WEeWh-woqJ8MDKQ",
+                        title: "Advanced English Communication Skills",
+                        rewardPoints: 25
+                    )
+                ]
+            ),
+            GamificationDashboardDataModel.GroupedCampaign(
+                id: 2,
+                name: "Data Science Challenge",
+                startDate: "2025-11-21T00:00:00",
+                endDate: "2025-12-24T00:00:00",
+                rewardPoints: 100,
+                courses: [
+                    GamificationDashboardDataModel.GroupedCampaign.Course(
+                        id: 2542,
+                        code: "coursera_Specialization~ZmRNDv6LEeqxFw7dZceVSw",
+                        title: "Introducción a la Ciencia de Datos",
+                        rewardPoints: 30
+                    ),
+                    GamificationDashboardDataModel.GroupedCampaign.Course(
+                        id: 2543,
+                        code: "coursera_Specialization~_u-5WC22EeandQ6BurPvEQ",
+                        title: "Machine Learning Fundamentals",
+                        rewardPoints: 40
+                    ),
+                    GamificationDashboardDataModel.GroupedCampaign.Course(
+                        id: 18532,
+                        code: "8000",
+                        title: "Python for Data Analysis",
+                        rewardPoints: 35
+                    )
+                ]
+            ),
+            GamificationDashboardDataModel.GroupedCampaign(
+                id: 3,
+                name: "Professional Development Week",
+                startDate: "2025-11-24T00:00:00",
+                endDate: "2025-12-08T00:00:00",
+                rewardPoints: 75,
+                courses: [
+                    GamificationDashboardDataModel.GroupedCampaign.Course(
+                        id: 19969,
+                        code: "8912",
+                        title: "Leadership and Management Skills",
+                        rewardPoints: 50
+                    ),
+                    GamificationDashboardDataModel.GroupedCampaign.Course(
+                        id: 18868,
+                        code: "7494",
+                        title: "Effective Communication in the Workplace",
+                        rewardPoints: 25
+                    )
+                ]
+            )
+        ]
+    }
+    
+    static var previewSingle: GamificationDashboardDataModel.GroupedCampaign {
+        previewCampaigns[0]
     }
 }
 

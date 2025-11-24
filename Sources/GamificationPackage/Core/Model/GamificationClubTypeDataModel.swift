@@ -25,25 +25,28 @@ final class GamificationClubTypeDataModel: ObservableObject {
     
     @Published var userProfileDetail: GamificationDashboardDataModel.UserProfileResponseModel?
     
+    private var points: Int = 0
+
     
     // MARK: - Configure Club Type Based on Points
     func configure(points: Int) {
+        self.points = points
         
-        // 1. Find matched range
-        guard let matched = ranges.first(where: { points >= $0.minPoint && points <= $0.maxPoint }) else {
-            return
-        }
-        
-        // 2. Normalize string: "Grand Master" → "grandmaster"
-        let key = matched.description
-            .replacingOccurrences(of: " ", with: "")
-            .lowercased()
-        
-        // 3. Convert string to ClubType
-        if let type = ClubType(rawValue: key) {
-            self.clubType = type
-        }
+        self.clubType = self.clubType.getCurrentClubType(userPoints: points, ranges: self.ranges)
     }
+}
+
+
+//MARK: Utility functions
+extension GamificationClubTypeDataModel {
+    func getRangeText(_ clubType: ClubType) -> String {
+        clubType.getRangeText(ranges: self.ranges)
+    }
+    
+    func isClubLocked(_ clubType: ClubType) -> Bool {
+        clubType.isLocked(userPoints: self.points, ranges: self.ranges)
+    }
+    
 }
 
 
@@ -86,23 +89,23 @@ extension GamificationClubTypeDataModel {
             case .knight:
                 "gm_Knight_Club_bg"
             case .king:
-                "gm_Knight_Club_bg"
+                "gm_King_Club_bg"
             case .queens:
-                "gm_Knight_Club_bg"
+                "gm_Queen_Club_bg"
             case .master:
-                "gm_Knight_Club_bg"
+                "gm_Master_Club_bg"
             case .grandmaster:
-                "gm_Knight_Club_bg"
+                "gm_Grand_Master_Club_bg"
             }
         }
         
         var clubLevelSticker: String {
             switch self {
             case .knight:       return "clan_knight_club"
-            case .king:         return "clan_knight_club"
-            case .queens:       return "clan_knight_club"
-            case .master:       return "clan_knight_club"
-            case .grandmaster:  return "clan_knight_club"
+            case .king:         return "clan_king_club"
+            case .queens:       return "clan_queens_club"
+            case .master:       return "clan_master_club"
+            case .grandmaster:  return "clan_grand_master_club"
             }
         }
         
@@ -113,6 +116,63 @@ extension GamificationClubTypeDataModel {
             case .queens:       return "bg_queen_level_club"
             case .master:       return "bg_master_level_club"
             case .grandmaster:  return "bg_grand_master_level_club"
+            }
+        }
+        
+        func getRangeText(ranges: [GamificationDashboardDataModel.GamificationLevelResponseModel]) -> String {
+            
+            switch self {
+            case .knight:
+                "\(ranges[safe: 0]?.minPoint ?? 0) - \(ranges[safe: 0]?.maxPoint ?? 0)"
+            case .king:
+                "\(ranges[safe: 1]?.minPoint ?? 0) - \(ranges[safe: 1]?.maxPoint ?? 0)"
+            case .queens:
+                "\(ranges[safe: 2]?.minPoint ?? 0) - \(ranges[safe: 2]?.maxPoint ?? 0)"
+            case .master:
+                "\(ranges[safe: 3]?.minPoint ?? 0) - \(ranges[safe: 3]?.maxPoint ?? 0)"
+            case .grandmaster:
+                "\(ranges[safe: 4]?.minPoint ?? 0) - \(ranges[safe: 4]?.maxPoint ?? 0)"
+            }
+        }
+        
+        func isLocked(userPoints: Int, ranges: [GamificationDashboardDataModel.GamificationLevelResponseModel]) -> Bool {
+            switch self {
+            case .knight:
+                userPoints <= ranges[safe: 0]?.minPoint ?? 0
+            case .king:
+                userPoints <= ranges[safe: 1]?.minPoint ?? 0
+            case .queens:
+                userPoints <= ranges[safe: 2]?.minPoint ?? 0
+            case .master:
+                userPoints <= ranges[safe: 3]?.minPoint ?? 0
+            case .grandmaster:
+                userPoints <= ranges[safe: 4]?.minPoint ?? 0
+            }
+        }
+        
+        func getCurrentClubType(userPoints: Int, ranges: [GamificationDashboardDataModel.GamificationLevelResponseModel]) -> ClubType {
+            // Try to find matching range
+            if let matched = ranges.first(where: { userPoints >= $0.minPoint && userPoints <= $0.maxPoint }) {
+                return clubType(for: matched.id)
+            }
+            
+            // If no match, check if points exceed highest range
+            if let highestRange = ranges.max(by: { $0.maxPoint < $1.maxPoint }),
+               userPoints > highestRange.maxPoint {
+                return clubType(for: highestRange.id) // Return highest club
+            }
+            
+            // Default to lowest club
+            return .knight
+        }
+
+        private func clubType(for id: Int) -> ClubType {
+            switch id {
+            case 0: return .knight
+            case 1: return .king
+            case 2: return .queens
+            case 3: return .master
+            default: return .grandmaster
             }
         }
     }

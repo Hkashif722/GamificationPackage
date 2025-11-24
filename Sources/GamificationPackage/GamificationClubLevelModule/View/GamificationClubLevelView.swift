@@ -10,25 +10,28 @@ import SwiftUI
 
 internal struct GamificationClubLevelView: View {
     
-    let shadowColor: Color = Color(hex: "#FF00B4")
+    @StateObject var gamificationClubLevelViewModel: GamificationClubLevelViewModel
+   
     
-    // Track the currently selected club
-    @State private var selectedClub: GamificationClubTypeDataModel.ClubType?
-    
-    // Simple animation trigger
-    @State private var isAnimating = false
+    init(router: Router) {
+        _gamificationClubLevelViewModel = StateObject(
+            wrappedValue: GamificationClubLevelViewModel(router: router)
+        )
+    }
     
     var body: some View {
-        
-        ZStack {
-            
-            clubLevelItemListView
-            
-        }
-        .center()
-        .ignoresSafeArea()
-        .onAppear {
-            isAnimating = true
+        ZStack(alignment: .topTrailing) {
+            closeButtonView
+            ZStack {
+                
+                clubLevelItemListView
+                
+            }
+            .center()
+            .ignoresSafeArea()
+            .onAppear {
+                gamificationClubLevelViewModel.isAnimating = true
+            }
         }
     }
     
@@ -45,27 +48,36 @@ internal struct GamificationClubLevelView: View {
 
     private func clubItemView(for club: GamificationClubTypeDataModel.ClubType, at index: Int) -> some View {
         GamificationClubLevelItemView(
+            gamificationClubTypeModel: gamificationClubLevelViewModel.gamificationClubTypeModel,
             clubType: club,
-            isClubLocked: club == GamificationClubTypeDataModel.ClubType.grandmaster
+            isClubLocked: club == gamificationClubLevelViewModel.selectedClub
         )
         .shadow(
-            color: selectedClub == club ? shadowColor : .clear,
+            color: gamificationClubLevelViewModel.selectedClub == club
+            ? gamificationClubLevelViewModel.shadowColor
+            : .clear,
             radius: 8
         )
-        .onTapGesture {
-            selectedClub = club
-        }
-        .scaleEffect(isAnimating ? 1.0 : 0.8)
+        .scaleEffect(gamificationClubLevelViewModel.isAnimating ? 1.0 : 0.8)
         .animation(
             .spring(response: 0.6, dampingFraction: 0.7)
             .delay(Double(index) * 0.15),
-            value: isAnimating
+            value: gamificationClubLevelViewModel.isAnimating
         )
     }
+    
+    private var closeButtonView: some View {
+        Button(action: gamificationClubLevelViewModel.dismissPopup) {
+            Image("ic_gm_close", bundle: .module)
+                .frame(width: 45, height: 45)
+        }
+        .padding()
+    }
+
     
 }
 
 
 #Preview {
-    GamificationClubLevelView()
+    GamificationClubLevelView(router: Router())
 }

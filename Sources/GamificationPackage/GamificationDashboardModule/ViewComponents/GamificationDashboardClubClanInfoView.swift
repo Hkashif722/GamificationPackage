@@ -16,6 +16,10 @@ import SwiftUI
 
 internal struct GamificationDashboardClubClanInfoView: View {
     
+    @ObservedObject private var clubTypeModel = GamificationClubTypeDataModel.shared
+    
+    let router: Router
+    
     var body: some View {
         Group {
             clubInfoBannerImageView
@@ -30,8 +34,13 @@ internal struct GamificationDashboardClubClanInfoView: View {
             bundle: .module
         )
         .resizable()
+        .scaledToFit()
         .frame(width: 150, height: 180)
         .topLeading()
+        .offset(y: -13)
+        .onTapGesture {
+            router.presentPopup(.clubLeveType)
+        }
     }
     
     
@@ -52,7 +61,7 @@ internal struct GamificationDashboardClubClanInfoView: View {
     }
     
     private var clubNameView: some View {
-        Text(GamificationClubTypeDataModel.shared.clubType.rawValue)
+        Text(clubTypeModel.clubType.rawValue)
             .appFont(.quanticoBold, size: 22)
             .foregroundStyle(.white)
     }
@@ -61,5 +70,11 @@ internal struct GamificationDashboardClubClanInfoView: View {
 }
 
 #Preview {
-    GamificationDashboardClubClanInfoView()
+    ZStack {
+        GamificationDashboardBackgroundView()
+            .blur(radius: 4)
+        GamificationDashboardClubClanInfoView(router: Router())
+    }
+    .fullSize()
+    .ignoresSafeArea()
 }

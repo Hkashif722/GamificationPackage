@@ -50,7 +50,7 @@ struct GamificationDashBoardView: View {
     private var content: some View {
         ZStack {
             GamificationDashboardBackgroundView()
-            GamificationDashboardClubClanInfoView()
+            GamificationDashboardClubClanInfoView(router: router)
             GamificationDashboardNavControlView()
             GamificationDashboardProfileItemsView()
             GamificationDashboardScoreView(score: gmDashBoardViewModel.myRankingResponseModel?.totalPoint)

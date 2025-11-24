@@ -18,6 +18,7 @@ internal class GamificationDashboardViewModel: BaseRoutableNavModel {
     @Published var houseMasters: [GamificationDashboardDataModel.GETALLHouseMasterResponseModel] = []
     @Published var missionCount: GamificationDashboardDataModel.GamificationMissionResponseModel = .default
     @Published var rewardPoints: GamificationDashboardDataModel.HouseRewardPointCountResponseModel?
+    @Published var campaignGroupedCourseData: [GamificationDashboardDataModel.GroupedCampaign] = []
     
     override init(router: Router) {
         super.init(router: router)
@@ -46,18 +47,25 @@ internal class GamificationDashboardViewModel: BaseRoutableNavModel {
                 try await getUerProfileDetails()
             }
             
+            let getCampaignData = Task {
+                try await getCampaignDetails()
+            }
+            
             // Await all results
             let ranking = try await rankingTask.value
             let masters = try await houseMastersTask.value
             let missions = try await missionCountTask.value
             let levelData = try await levelsTask.value
             let userProfileDetail = try await getUserProfileDetail.value
+            let campaignCourseData = try await getCampaignData.value
             
             // Update properties on the main actor
             handleRankingResponse(ranking)
             self.houseMasters = masters
             self.missionCount = missions
-            GamificationClubTypeDataModel.shared.ranges = levelData
+            self.campaignGroupedCourseData = campaignCourseData.groupedByCampaign()
+            GamificationClubTypeDataModel.shared.ranges = levelData.sorted()
+            GamificationClubTypeDataModel.shared.configure(points: ranking.myRanking?.first?.totalPoint ?? 0)
             GamificationClubTypeDataModel.shared.userProfileDetail = userProfileDetail
             
         } catch {
@@ -142,6 +150,18 @@ internal extension GamificationDashboardViewModel {
 }
 
 
+internal extension GamificationDashboardViewModel {
+    private func getCampaignDetails() async throws -> [GamificationDashboardDataModel.CampaignCourseItem] {
+        let endpoint = GamificationDashboardDataModel.Endpoint.getCampaignData
+        return try await ApiService.shared.requestGetHeader(
+            type: [GamificationDashboardDataModel.CampaignCourseItem].self,
+            model: endpoint
+        )
+    }
+}
+
+
+
 
 //MARK: Handle Navigation
 internal extension GamificationDashboardViewModel {
@@ -171,6 +191,12 @@ internal extension GamificationDashboardViewModel {
             
         case .missionGridList(let mission):
             GamificationMissionGridContentView(router: self.router, mission: mission)
+            
+        case .clubLeveType:
+            GamificationClubLevelView(router: self.router)
+            
+        case .campaigns:
+            GamificationCampaignView(router: self.router, campaignCourseData: self.campaignGroupedCourseData)
             
         default:
             GamificationMissionCardStackingView(router: self.router, mission: .bossMission(model: .default, courses: []))

@@ -10,22 +10,25 @@ import SwiftUI
 
 internal struct GamificationDashboardBackgroundView: View {
     
+    @ObservedObject private var clubTypeModel = GamificationClubTypeDataModel.shared
+    
     var body: some View {
-        ZStack {
+        GeometryReader { geometry in
             gamificationBackgroundImage
+                .frame(width: geometry.size.width, height: geometry.size.height)
+                .clipped()
         }
+        .ignoresSafeArea()
     }
     
     private var gamificationBackgroundImage: some View {
         SwiftUIUtility.BackgroundImageView(
-            imageName: GamificationClubTypeDataModel.shared.clubType.dashboardBackground,
+            imageName: clubTypeModel.clubType.dashboardBackground,
             contentMode: .fill
         )
     }
-}   
-
+}
 
 #Preview {
     GamificationDashboardBackgroundView()
 }
-
