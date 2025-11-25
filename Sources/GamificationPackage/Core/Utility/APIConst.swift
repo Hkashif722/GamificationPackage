@@ -15,7 +15,7 @@ internal struct APIConst {
     static let GetAllHouseMaster = "user/GetAllHouseMaster";
     static let GamificationLevel = "GamificationLevel"
     static let GamificationMissionCount = "Gamification/MissionCounts"
-    static let GetHouseRewardPointCount = "GetHouseRewardPointCount"
+    static let GetHouseRewardPointCount = "user/GetHouseRewardPointCount"
     static let GetUserProfile = "user/GetUserProfile"
     static let lxpPath = "/org-content"
     static nonisolated(unsafe) var baseURL = ""
@@ -32,4 +32,6 @@ internal struct APIConst {
     static let GetBossCoursesCount = "MyCourses/GetMissionCourses/count/boss"
     static let GetBossCourses = "MyCourses/GetMissionCourses/1/8/boss"
     static let GetCampaignApplicabilitySetting = "Courses/GetCampaignApplicabilitySetting"
+    static let GetCampaignApplicabilitySettingForLeaderboard = "Courses/GetCampaignApplicabilitySettingForLeaderboard"
+    static let GetCampaignSpecificLeaderboardByCampaignId = "Courses/GetCampaignSpecificLeaderboardByCampaignId"
 }

@@ -17,7 +17,7 @@ internal class GamificationDashboardViewModel: BaseRoutableNavModel {
     @Published var topRankingResponseModel: [GamificationDashboardDataModel.LeaderBoardResponseModel.Ranking] = []
     @Published var houseMasters: [GamificationDashboardDataModel.GETALLHouseMasterResponseModel] = []
     @Published var missionCount: GamificationDashboardDataModel.GamificationMissionResponseModel = .default
-    @Published var rewardPoints: GamificationDashboardDataModel.HouseRewardPointCountResponseModel?
+    @Published var houseRewardPoints: GamificationDashboardDataModel.HouseRewardPointCountResponseModel?
     @Published var campaignGroupedCourseData: [GamificationDashboardDataModel.GroupedCampaign] = []
     
     override init(router: Router) {
@@ -39,6 +39,10 @@ internal class GamificationDashboardViewModel: BaseRoutableNavModel {
                 try await getMissionCountResponse()
             }
             
+            let houseRewardPointsTask = Task {
+                try await getHouseRewardPointsResponse()
+            }
+            
             let levelsTask = Task {
                 try await getGamificationLevelResponse()
             }
@@ -55,6 +59,7 @@ internal class GamificationDashboardViewModel: BaseRoutableNavModel {
             let ranking = try await rankingTask.value
             let masters = try await houseMastersTask.value
             let missions = try await missionCountTask.value
+            let houseRewardPoints = try await houseRewardPointsTask.value
             let levelData = try await levelsTask.value
             let userProfileDetail = try await getUserProfileDetail.value
             let campaignCourseData = try await getCampaignData.value
@@ -63,6 +68,7 @@ internal class GamificationDashboardViewModel: BaseRoutableNavModel {
             handleRankingResponse(ranking)
             self.houseMasters = masters
             self.missionCount = missions
+            self.houseRewardPoints = houseRewardPoints
             self.campaignGroupedCourseData = campaignCourseData.groupedByCampaign()
             GamificationClubTypeDataModel.shared.ranges = levelData.sorted()
             GamificationClubTypeDataModel.shared.configure(points: ranking.myRanking?.first?.totalPoint ?? 0)
@@ -112,6 +118,18 @@ internal extension GamificationDashboardViewModel {
         let endpoint = GamificationDashboardDataModel.Endpoint.missionCount
         return try await ApiService.shared.requestGetHeader(
             type: GamificationDashboardDataModel.GamificationMissionResponseModel.self,
+            model: endpoint
+        )
+    }
+}
+
+// MARK: - House Reward Point API
+
+internal extension GamificationDashboardViewModel {
+    private func getHouseRewardPointsResponse() async throws -> GamificationDashboardDataModel.HouseRewardPointCountResponseModel {
+        let endpoint = GamificationDashboardDataModel.Endpoint.houseRewardPointCount
+        return try await ApiService.shared.requestGetHeader(
+            type: GamificationDashboardDataModel.HouseRewardPointCountResponseModel.self,
             model: endpoint
         )
     }
@@ -197,6 +215,33 @@ internal extension GamificationDashboardViewModel {
             
         case .campaigns:
             GamificationCampaignView(router: self.router, campaignCourseData: self.campaignGroupedCourseData)
+            
+        case .campaignLeaderboard:
+            GamificationCampaignLeaderBoardView(router: router)
+            
+        case .houseChart:
+            let housesChartModel: [GamificationHouseChartDataModel.HouseScoreModel] = [
+                .init(name: "Red House",    score: houseRewardPoints?.red ?? 0, barColor: .red),
+                .init(name: "Green House",  score: houseRewardPoints?.green ?? 0, barColor: .green),
+                .init(name: "Blue House",   score: houseRewardPoints?.blue ?? 0, barColor: .blue),
+                .init(name: "Yellow House", score: houseRewardPoints?.yellow ?? 0, barColor: .yellow)
+               ]
+            
+            let _ = {
+                GamificationHouseChartDataModel.HouseScoreModel.userHouse = housesChartModel.first { house in
+                    guard let houseName = self.myRankingResponseModel?.houseName else { return false }
+                    return house.name.contains(houseName)
+                }
+            }()
+            
+            GamificationHouseChartView(router: self.router, houseChartModel: housesChartModel)
+            
+        case .accomplishment:
+            let navModel = GamificationAccomplishementDataModel.AccomplishmentNavDataModel(
+                missionCountModel: self.missionCount,
+                myRankingModel: self.myRankingResponseModel
+            )
+            GamificationAccomplishmentView(router: self.router, navModel: navModel)
             
         default:
             GamificationMissionCardStackingView(router: self.router, mission: .bossMission(model: .default, courses: []))

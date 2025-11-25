@@ -10,6 +10,10 @@ import SwiftUI
 
 struct GamificationHouseChartHeaderView: View {
     
+    @ObservedObject private var clubTypeData:GamificationClubTypeDataModel = .shared
+    
+    let userHouseModel: GamificationHouseChartDataModel.HouseScoreModel?
+    
     var body: some View {
         HStack {
             currentHouseFalgView
@@ -22,13 +26,13 @@ struct GamificationHouseChartHeaderView: View {
     
     private var currentHouseFalgView: some View {
         CustomShapes.HalfRoundedRectangle()
-            .fill(Color.red)
+            .fill(userHouseModel?.color ?? .red)
             .frame(width: 75, height: 20)
             .shadow(radius: 2)
     }
     
     private var userNameTextView: some View {
-        Text("LMS Admin")
+        Text(clubTypeData.userProfileDetail?.userName ?? "")
             .appFont(.poppinsRegular, size: 14, weight: .regular)
             .foregroundStyle(.white)
     }
@@ -36,7 +40,7 @@ struct GamificationHouseChartHeaderView: View {
     
     private var userProfileView: some View {
         SwiftUIUtility.ProfileImageViewWithVariableCorner(
-            imageUrl: URL(string: ""),
+            imageUrl: clubTypeData.userProfileDetail?.computedUseProlePictureURL,
             size: 40,
             profileBorderColor: .white
         )
@@ -47,7 +51,7 @@ struct GamificationHouseChartHeaderView: View {
 #Preview {
     ZStack {
         Color.black.ignoresSafeArea()
-        GamificationHouseChartHeaderView()
+        GamificationHouseChartHeaderView(userHouseModel: GamificationHouseChartDataModel.HouseScoreModel.houses[0])
     }
 }
 

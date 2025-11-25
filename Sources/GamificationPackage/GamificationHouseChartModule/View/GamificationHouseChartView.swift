@@ -10,6 +10,20 @@ import SwiftUI
 
 struct GamificationHouseChartView: View {
     
+    @StateObject private var hourseChartViewModel: GamificationHouseChartViewModel
+    
+    init(
+        router: Router,
+        houseChartModel: [GamificationHouseChartDataModel.HouseScoreModel]
+    ) {
+        _hourseChartViewModel = StateObject(
+            wrappedValue: GamificationHouseChartViewModel(
+                router: router,
+                houseChartModel: houseChartModel
+            )
+        )
+    }
+    
     var body: some View {
         
         ZStack(alignment: .topTrailing) {
@@ -28,7 +42,9 @@ struct GamificationHouseChartView: View {
     
     private var gamificationHouseChartView: some View {
         VStack {
-            GamificationHouseChartHeaderView()
+            GamificationHouseChartHeaderView(
+                userHouseModel: GamificationHouseChartDataModel.HouseScoreModel.userHouse
+            )
             houseChartView
         }
         .frame(maxWidth: 480)
@@ -38,13 +54,13 @@ struct GamificationHouseChartView: View {
     
     private var houseChartView: some View {
         CustomBarChartView(
-            data: GamificationHouseChartDataModel.HouseScoreModel.houses,
+            data: hourseChartViewModel.houseChartModel,
             configuration: GamificationHouseChartDataModel.HouseScoreModel.chartConfiguration
         )
     }
     
     private var closeButtonView: some View {
-        Button(action: { }) {
+        Button(action: hourseChartViewModel.dismissPopup) {
             Image("ic_gm_close", bundle: .module)
                 .frame(width: 45, height: 45)
         }
@@ -62,6 +78,9 @@ struct GamificationHouseChartView: View {
     ZStack {
         GamificationDashboardBackgroundView()
             .blur(radius: 4)
-        GamificationHouseChartView()
+        GamificationHouseChartView(
+            router: Router(),
+            houseChartModel: GamificationHouseChartDataModel.HouseScoreModel.houses
+        )
     }
 }

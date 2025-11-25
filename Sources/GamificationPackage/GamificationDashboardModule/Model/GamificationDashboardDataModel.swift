@@ -151,6 +151,32 @@ internal struct GamificationDashboardDataModel {
             case completedNormalMission
         }
         
+        func toMissionItems() -> [GamificationAccomplishementDataModel.MissionItem] {
+            [
+                GamificationAccomplishementDataModel.MissionItem(
+                    title: "Accomplished Mini Missions",
+                    completed: completedMiniMission,
+                    total: totalMiniMission
+                ),
+                GamificationAccomplishementDataModel.MissionItem(
+                    title: "Accomplished Normal Missions",
+                    completed: completedNormalMission,
+                    total: totalNormalMission
+                ),
+                GamificationAccomplishementDataModel.MissionItem(
+                    title: "Accomplished Boss Missions",
+                    completed: completedBossMission,
+                    total: totalBossMission
+                ),
+                GamificationAccomplishementDataModel.MissionItem(
+                    title: "Total Missions Completed",
+                    completed: completedMiniMission + completedNormalMission + completedBossMission,
+                    total: totalMiniMission + totalNormalMission + totalBossMission
+                )
+            ]
+        }
+        
+
         static var `default`: Self {
             .init(totalMiniMission: 0, totalBossMission: 0, totalNormalMission: 0, completedMiniMission: 0, completedBossMission: 0, completedNormalMission: 0)
         }
@@ -232,7 +258,7 @@ internal extension GamificationDashboardDataModel {
         case houseMasterList
         case levelList
         case missionCount
-        case rewardPointCount
+        case houseRewardPointCount
         case getProfileDetail
         case getCampaignData
         // MARK: - PATH
@@ -267,11 +293,11 @@ internal extension GamificationDashboardDataModel {
                     APIConst.GamificationMissionCount
                 ].joined(separator: "/")
                 
-            case .rewardPointCount:
+            case .houseRewardPointCount:
                 return [
                     APIConst.courseBaseUrl,
                     APIConst.versionAPI,
-                    APIConst.GamificationMissionCount // confirm if correct
+                    APIConst.GetHouseRewardPointCount // confirm if correct
                 ].joined(separator: "/")
                 
             case .getProfileDetail:

@@ -9,6 +9,10 @@
 import SwiftUI
 
 struct GamificationCampagnListView: View {
+    
+    let courses: [GamificationDashboardDataModel.GroupedCampaign.Course]
+    let onCourseClick: (GamificationDashboardDataModel.GroupedCampaign.Course) -> Void
+    
     var body: some View {
         gamificationPackageListView
     }
@@ -17,8 +21,11 @@ struct GamificationCampagnListView: View {
     private var gamificationPackageListView: some View {
         ScrollView {
             VStack(spacing: 8) {
-                ForEach(0..<5) { index in
-                    GamificationCampaignListItemView(onClick: {})
+                ForEach(Array(courses.enumerated()), id: \.element.id) { index, course in
+                    GamificationCampaignListItemView(
+                        course: course,
+                        onClick: { onCourseClick(course) }
+                    )
                     dividerView(index)
                 }
             }
@@ -29,7 +36,7 @@ struct GamificationCampagnListView: View {
     
     @ViewBuilder
     private func dividerView(_ index: Int) -> some View {
-        if index < 4 {
+        if index < courses.count - 1 {
             Divider()
                 .background(.white)
         }
@@ -38,5 +45,8 @@ struct GamificationCampagnListView: View {
 
 #Preview {
     Color.gray.ignoresSafeArea()
-    GamificationCampagnListView()
+    GamificationCampagnListView(
+        courses: GamificationDashboardDataModel.GroupedCampaign.previewSingle.courses,
+        onCourseClick: { _ in }
+    )
 }

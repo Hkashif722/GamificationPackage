@@ -40,9 +40,18 @@ struct GamificationCampaignView: View {
                     onPreviousClick: campaignViewModel.previousPage,
                     onNextClick: campaignViewModel.nextPage
                 )
-                GamificationCampagnListView()
+                GamificationCampagnListView(
+                    courses: campaignViewModel.paginatedCourses,
+                    onCourseClick: campaignViewModel.onCourseClick
+                )
                 SwiftUIUtility.GradientDivider()
-                GamificationCampaignBottomControlView()
+                GamificationCampaignBottomControlView(
+                    paginationText: campaignViewModel.coursePaginationText,
+                    hasPrevious: campaignViewModel.hasPreviousCoursePage,
+                    hasNext: campaignViewModel.hasNextCoursePage,
+                    onPreviousClick: campaignViewModel.previousCoursePage,
+                    onNextClick: campaignViewModel.nextCoursePage
+                )
             }
             .background { backgroundFrostView }
         }
@@ -51,7 +60,7 @@ struct GamificationCampaignView: View {
     }
     
     private var closeButtonView: some View {
-        Button(action: { }) {
+        Button(action: campaignViewModel.dismissPopup) {
             Image("ic_gm_close", bundle: .module)
                 .frame(width: 45, height: 45)
         }

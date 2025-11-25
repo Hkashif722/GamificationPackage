@@ -52,7 +52,7 @@ struct GamificationDashBoardView: View {
             GamificationDashboardBackgroundView()
             GamificationDashboardClubClanInfoView(router: router)
             GamificationDashboardNavControlView()
-            GamificationDashboardProfileItemsView()
+            GamificationDashboardProfileItemsView(router: router)
             GamificationDashboardScoreView(score: gmDashBoardViewModel.myRankingResponseModel?.totalPoint)
             GamificationDashboardCentralMenuItemDeck(onAction: gmDashBoardViewModel.presentPopupView(_:))
         }

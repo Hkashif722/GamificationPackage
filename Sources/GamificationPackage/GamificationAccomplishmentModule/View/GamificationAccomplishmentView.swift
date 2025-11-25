@@ -10,6 +10,20 @@ import SwiftUI
 
 struct GamificationAccomplishmentView: View {
     
+    @StateObject private var accomplishmentViewModel: GamificationAccomplishmentViewModel
+    
+    init(
+        router: Router,
+        navModel: GamificationAccomplishementDataModel.AccomplishmentNavDataModel
+    ) {
+        _accomplishmentViewModel = StateObject(
+            wrappedValue: GamificationAccomplishmentViewModel(
+                router: router,
+                navModel: navModel
+            )
+        )
+    }
+    
     var body: some View {
         ZStack(alignment: .topTrailing) {
             closeButtonView
@@ -24,8 +38,10 @@ struct GamificationAccomplishmentView: View {
     
     private var gamificationAccomplishmentView: some View {
         VStack {
-            GamificationAccomplishmentHeaderView()
-            GamificationAccomplishmentListView()
+            GamificationAccomplishmentHeaderView(
+                myRankingModel: accomplishmentViewModel.navModel.myRankingModel
+            )
+            GamificationAccomplishmentListView(missionItems: accomplishmentViewModel.missionItems)
         }
         .frame(maxWidth: 480)
         .background { backgroundFrostView }
@@ -40,7 +56,7 @@ struct GamificationAccomplishmentView: View {
     }
     
     private var closeButtonView: some View {
-        Button(action: { }) {
+        Button(action: accomplishmentViewModel.dismissPopup) {
             Image("ic_gm_close", bundle: .module)
                 .frame(width: 45, height: 45)
         }
@@ -52,6 +68,12 @@ struct GamificationAccomplishmentView: View {
     ZStack {
         GamificationDashboardBackgroundView()
             .blur(radius: 4)
-        GamificationAccomplishmentView()
+        GamificationAccomplishmentView(
+            router: Router(),
+            navModel: .init(
+                missionCountModel: .default,
+                myRankingModel: .preview
+            )
+        )
     }
 }

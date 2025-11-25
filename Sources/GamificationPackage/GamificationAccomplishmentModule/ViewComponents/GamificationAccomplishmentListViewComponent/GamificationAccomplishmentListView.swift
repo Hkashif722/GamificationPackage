@@ -10,6 +10,8 @@ import SwiftUI
 
 struct GamificationAccomplishmentListView: View {
     
+    let missionItems: [GamificationAccomplishementDataModel.MissionItem]
+    
     var body: some View {
         VStack {
             gamificationAccomplishmentListView
@@ -19,26 +21,26 @@ struct GamificationAccomplishmentListView: View {
     private var gamificationAccomplishmentListView: some View {
         ScrollView {
             VStack(spacing: 8) {
-                ForEach(0..<4) { item in
-                    GamificationAccomplishmentListItemView()
-                    dividerView(item)
+                ForEach(missionItems) { item in
+                    GamificationAccomplishmentListItemView(
+                        title: item.title,
+                        completed: item.completed,
+                        total: item.total
+                    )
+                    if item.id != missionItems.last?.id {
+                        Divider()
+                            .background(.white)
+                    }
                 }
             }
         }
         .versionedContentMargins()
         .applyScrollBounceBehavior()
     }
-    
-    @ViewBuilder
-    private func dividerView(_ index: Int) -> some View {
-        if index < 4 {
-            Divider()
-                .background(.white)
-        }
-       
-    }
 }
 
 #Preview {
-    GamificationAccomplishmentListView()
+    GamificationAccomplishmentListView(
+        missionItems: GamificationDashboardDataModel.GamificationMissionResponseModel.default.toMissionItems()
+    )
 }

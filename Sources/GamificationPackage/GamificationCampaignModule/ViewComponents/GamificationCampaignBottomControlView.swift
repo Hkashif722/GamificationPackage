@@ -10,6 +10,12 @@ import SwiftUI
 
 struct GamificationCampaignBottomControlView: View {
     
+    let paginationText: String
+    let hasPrevious: Bool
+    let hasNext: Bool
+    let onPreviousClick: () -> Void
+    let onNextClick: () -> Void
+    
     let bottomDescriptionText: String = "Complete the above course during the campaign and earn bonus reward points!"
     
     
@@ -31,14 +37,14 @@ struct GamificationCampaignBottomControlView: View {
     
     private var paginationContentView: some View {
         HStack(spacing: 8) {
-            controlBackButtonView(iconName: "chevron.left", onClick: {})
+            controlBackButtonView(iconName: "chevron.left", isEnabled: hasPrevious, onClick: onPreviousClick)
             paginationView
-            controlBackButtonView(iconName: "chevron.right", onClick: {})
+            controlBackButtonView(iconName: "chevron.right", isEnabled: hasNext, onClick: onNextClick)
         }
     }
     
     private var paginationView: some View {
-        Text("1-4 / 10")
+        Text(paginationText)
             .foregroundStyle(.white)
             .appFont(.poppinsSemiBold, size: 14, weight: .semibold)
     }
@@ -49,7 +55,7 @@ struct GamificationCampaignBottomControlView: View {
 //MARK: Utility
 extension GamificationCampaignBottomControlView {
     
-    private func controlBackButtonView(iconName: String, onClick: @escaping () -> ()) -> some View {
+    private func controlBackButtonView(iconName: String, isEnabled: Bool, onClick: @escaping () -> ()) -> some View {
         
         SwiftUIUtility.RectangularGradientButton(
             iconName: iconName,
@@ -67,6 +73,7 @@ extension GamificationCampaignBottomControlView {
             action: onClick
         )
         .frame(width: 45)
+        .disabledWithOpacity(!isEnabled)
     }
     
 }
@@ -75,6 +82,12 @@ extension GamificationCampaignBottomControlView {
 #Preview {
     ZStack {
         Color.gray.ignoresSafeArea()
-        GamificationCampaignBottomControlView()
+        GamificationCampaignBottomControlView(
+            paginationText: "1-3 / 10",
+            hasPrevious: false,
+            hasNext: true,
+            onPreviousClick: {},
+            onNextClick: {}
+        )
     }
 }

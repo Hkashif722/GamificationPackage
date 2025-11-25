@@ -10,6 +10,10 @@ import SwiftUI
 
 struct GamificationAccomplishmentListItemView: View {
     
+    let title: String
+    let completed: Int
+    let total: Int
+    
     var body: some View {
         
         HStack(spacing: 16) {
@@ -30,14 +34,14 @@ struct GamificationAccomplishmentListItemView: View {
     }
 
     private var missionTitle: some View {
-        Text("Accomplished Mini Missions")
+        Text(title)
             .appFont(.poppinsSemiBold, size: 18, weight: .semibold)
             .minimumScaleFactor(0.5)
             .frame(maxWidth: .infinity, alignment: .leading)
     }
     
     private var missionCompletionInfo: some View {
-        Text("Past 7 days total: \(00)")
+        Text("Past 7 days total: \(completed)/\(total)")
             .appFont(.poppinsMedium, size: 14, weight: .medium)
     }
     
@@ -50,6 +54,10 @@ struct GamificationAccomplishmentListItemView: View {
 #Preview {
     ZStack {
         Color.black.ignoresSafeArea()
-        GamificationAccomplishmentListItemView()
+        GamificationAccomplishmentListItemView(
+            title: "Accomplished Mini Missions",
+            completed: 5,
+            total: 10
+        )
     }
 }

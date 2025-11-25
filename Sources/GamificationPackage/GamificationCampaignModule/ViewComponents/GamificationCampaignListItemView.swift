@@ -10,6 +10,7 @@ import SwiftUI
 
 struct GamificationCampaignListItemView: View {
     
+    let course: GamificationDashboardDataModel.GroupedCampaign.Course
     let onClick: () -> ()
     
     var body: some View {
@@ -23,14 +24,14 @@ struct GamificationCampaignListItemView: View {
     }
     
     private var campaignNameView: some View {
-        Text("Camp C01")
+        Text(course.title)
             .appFont(.poppinsSemiBold, size: 14, weight: .semibold)
+            .frame(maxWidth: .infinity, alignment: .leading)
     }
     
     private var campaignPointView: some View {
-        Text("Course Reward Point: 100")
+        Text("Course Reward Point: \(course.rewardPoints)")
             .appFont(.poppinsRegular, size: 14)
-            .frame(maxWidth: .infinity)
     }
 
     
@@ -57,6 +58,14 @@ struct GamificationCampaignListItemView: View {
 #Preview {
     ZStack {
         Color.gray.ignoresSafeArea()
-        GamificationCampaignListItemView(onClick: {})
+        GamificationCampaignListItemView(
+            course: GamificationDashboardDataModel.GroupedCampaign.Course(
+                id: 1,
+                code: "Camp C01",
+                title: "Test Course",
+                rewardPoints: 100
+            ),
+            onClick: {}
+        )
     }
 }

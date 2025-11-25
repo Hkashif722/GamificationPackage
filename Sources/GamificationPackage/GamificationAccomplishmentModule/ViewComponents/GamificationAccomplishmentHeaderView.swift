@@ -10,7 +10,8 @@ import SwiftUI
 
 struct GamificationAccomplishmentHeaderView: View {
     
-    let clubType = GamificationClubTypeDataModel.shared.clubType
+    @ObservedObject var clubLevelViewModel = GamificationClubTypeDataModel.shared
+    let myRankingModel: GamificationDashboardDataModel.LeaderBoardResponseModel.Ranking?
     
     var body: some View {
        
@@ -28,6 +29,7 @@ struct GamificationAccomplishmentHeaderView: View {
             stickerUserInfoView
             profileInfoView
         }
+        .padding(.trailing, 8)
     }
     
     private var stickerUserInfoView: some View {
@@ -51,7 +53,7 @@ struct GamificationAccomplishmentHeaderView: View {
     //MARK: Club Sticker View
     private var clubStikerView: some View {
         Image(
-            clubType.clubLevelSticker,
+            clubLevelViewModel.clubType.clubLevelSticker,
             bundle: .module
         )
         .resizable()
@@ -70,12 +72,12 @@ struct GamificationAccomplishmentHeaderView: View {
     }
     
     private var userNameTextView: some View {
-        Text("Lmsadmin")
+        Text(clubLevelViewModel.userProfileDetail?.userName ?? "")
             .appFont(.poppinsSemiBold, size: 14, weight: .semibold)
     }
     
     private var pointsView: some View {
-        Text("7999")
+        Text("\(myRankingModel?.totalPoint ?? 0)")
             .appFont(.poppinsSemiBold, size: 14, weight: .semibold)
             .foregroundStyle(ColorUtility.deepBlue)
             .padding(.horizontal, 16)
@@ -97,7 +99,7 @@ struct GamificationAccomplishmentHeaderView: View {
     //MARK: Profile Picture and Points
     private var profilePictureView: some View {
         SwiftUIUtility.ProfileImageViewWithVariableCorner(
-            imageUrl: URL(string: ""),
+            imageUrl: clubLevelViewModel.userProfileDetail?.computedUseProlePictureURL,
             size: 50,
             cornerRadius: 10,
             profileBorderColor: .white
@@ -105,7 +107,7 @@ struct GamificationAccomplishmentHeaderView: View {
     }
     
     private var profilePointView: some View {
-        Text("7999")
+        Text("\(myRankingModel?.totalPoint ?? 0)")
             .appFont(.poppinsBold, size: 16, weight: .bold)
             .softCapsuleBorder()
     }
@@ -123,6 +125,6 @@ struct GamificationAccomplishmentHeaderView: View {
 #Preview {
     ZStack {
         Color.black.ignoresSafeArea()
-        GamificationAccomplishmentHeaderView()
+        GamificationAccomplishmentHeaderView(myRankingModel: .preview)
     }
 }

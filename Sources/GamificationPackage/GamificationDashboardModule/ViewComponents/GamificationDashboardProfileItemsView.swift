@@ -14,6 +14,8 @@ internal struct GamificationDashboardProfileItemsView: View {
     
     let userProfileDetail = GamificationClubTypeDataModel.shared.userProfileDetail
     
+    let router: Router
+    
     var body: some View {
         
         ZStack {
@@ -37,7 +39,14 @@ internal struct GamificationDashboardProfileItemsView: View {
             profileBorderColor: .white,
             borderWidth: 5
         )
+        .onTapGesture {
+            router.presentPopup(.accomplishment)
+        }
         .zIndex(2)
+        .overlay(alignment: .leading) {
+            gmaificationHouIconView
+                .offset(x: -10,y:-15)
+        }
     }
     
     
@@ -86,6 +95,16 @@ internal struct GamificationDashboardProfileItemsView: View {
         }
     }
     
+    private var gmaificationHouIconView: some View {
+        Image(.gmIcHouse)
+            .resizable()
+            .scaledToFit()
+            .frame(width: 35, height: 35)
+            .onTapGesture {
+                router.presentPopup(.houseChart)
+            }
+    }
+    
 }
 
 
@@ -99,7 +118,7 @@ struct GamificationDashboardProfileItemsView_Preview: View {
         ZStack {
             GamificationDashboardBackgroundView()
                 .blur(radius: 3)
-            GamificationDashboardProfileItemsView()
+            GamificationDashboardProfileItemsView(router:Router())
         }
         .fullSize()
         .ignoresSafeArea()
