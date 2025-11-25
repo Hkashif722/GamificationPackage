@@ -10,6 +10,7 @@ import SwiftUI
 
 internal struct GamificationCampaignLeaderBoardHeaderProfileInfoView: View {
     
+    @ObservedObject var clubLevelViewModel = GamificationClubTypeDataModel.shared
     let campaignLeaderUserData: GamificationCampaignLeaderboardDataModel.CampaignLeaderboardSingleUserData?
     
     var body: some View {
@@ -41,7 +42,7 @@ extension GamificationCampaignLeaderBoardHeaderProfileInfoView {
     
     private var profilePictureView: some View {
         SwiftUIUtility.ProfileImageViewWithVariableCorner(
-            imageUrl: URL(string: ""),
+            imageUrl: clubLevelViewModel.userProfileDetail?.computedUseProlePictureURL,
             size: 40,
             cornerRadius: 10,
             profileBorderColor: .white

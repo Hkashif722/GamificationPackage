@@ -225,6 +225,64 @@ internal struct CustomViewModifier {
         }
     }
 
+    struct GradientBorderModifier: ViewModifier {
+        var cornerRadius: CGFloat = 20
+        var lineWidth: CGFloat = 2
+        var gradientColors: [Color] = [
+            Color(hex: "#00D9FF"), // Cyan
+            Color(hex: "#00FFB3"), // Teal/Green
+            Color(hex: "#00D9FF")  // Cyan
+        ]
+        
+        func body(content: Content) -> some View {
+            content
+                .overlay(
+                    RoundedRectangle(cornerRadius: cornerRadius)
+                        .stroke(
+                            LinearGradient(
+                                colors: gradientColors,
+                                startPoint: .top,
+                                endPoint: .bottom
+                            ),
+                            lineWidth: lineWidth
+                        )
+                )
+        }
+    }
+
+    
+    struct VersionedHorizontalContentMargins: ViewModifier {
+        func body(content: Content) -> some View {
+            if #available(iOS 17.0, *) {
+                // Use contentMargins without negative padding
+                content
+                    .contentMargins(.horizontal,10)
+                    .contentMargins(.top, -10, for: .scrollIndicators)
+            } else {
+                // Fallback to standard padding for earlier versions
+                content
+                    .padding(.horizontal, 10)
+            }
+        }
+    }
+    
+    struct VersionedHorizontalBottomContentMargins: ViewModifier {
+        func body(content: Content) -> some View {
+            if #available(iOS 17.0, *) {
+                // Use contentMargins without negative padding
+                content
+                    .contentMargins(.bottom,10)
+                    .contentMargins(.horizontal,10)
+                    .contentMargins(.horizontal, -10, for: .scrollIndicators)
+            } else {
+                // Fallback to standard padding for earlier versions
+                content
+                    .padding(.bottom, 10)
+                    .padding(.horizontal, 10)
+            }
+        }
+    }
+
 
 }
 
@@ -382,6 +440,36 @@ internal extension View {
     func disabledWithOpacity(_ isDisabled: Bool) -> some View {
         self.modifier(CustomViewModifier.DisabledOpacityModifier(isDisabled: isDisabled))
     }
+    
+    func gradientBorder(
+        cornerRadius: CGFloat = 20,
+        lineWidth: CGFloat = 2,
+        colors: [Color] = [
+            .white.opacity(0.7),
+            .gray.opacity(0.3),
+            .clear
+        ]
+    ) -> some View {
+        self.modifier(CustomViewModifier.GradientBorderModifier(
+            cornerRadius: cornerRadius,
+            lineWidth: lineWidth,
+            gradientColors: colors
+        ))
+    }
+    
+    
+    
+
+    
+    func versionedHorizontalContentMargins() -> some View {
+        self.modifier(CustomViewModifier.VersionedHorizontalContentMargins())
+    }
+    
+    
+    func versionedHorizontalBottomContentMargins() -> some View {
+        self.modifier(CustomViewModifier.VersionedHorizontalBottomContentMargins())
+    }
+    
     
     
     

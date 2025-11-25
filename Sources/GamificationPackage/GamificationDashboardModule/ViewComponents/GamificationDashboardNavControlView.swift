@@ -15,6 +15,8 @@
 import SwiftUI
 
 internal struct GamificationDashboardNavControlView: View {
+    @Environment(\.dismiss) private var dismiss
+    var onDismiss: (() -> Void)?
     
     var body: some View {
         
@@ -28,7 +30,6 @@ internal struct GamificationDashboardNavControlView: View {
         
         
     }
-//    "gamification_nav_control_bg"
     
     private var navigationControlBackgroundView: some View {
         Image(.gamificationNavControlBg)
@@ -61,9 +62,17 @@ internal struct GamificationDashboardNavControlView: View {
     }
     
     private var closeButtonView: some View {
-        Button(action: {}) {
+        Button(action: handleDismiss) {
             Image(.icGmClose)
                 .frame(width: 45, height: 45)
+        }
+    }
+    
+    private func handleDismiss() {
+        if let onDismiss = onDismiss {
+            onDismiss()
+        } else {
+            dismiss()
         }
     }
 }
@@ -72,5 +81,3 @@ internal struct GamificationDashboardNavControlView: View {
 #Preview {
     GamificationDashboardNavControlView()
 }
-
-

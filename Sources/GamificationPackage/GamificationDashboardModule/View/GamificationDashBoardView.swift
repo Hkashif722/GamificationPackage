@@ -10,15 +10,19 @@ import SwiftUI
 
 struct GamificationDashBoardView: View {
     
-    @ObservedObject var router: Router
+    @StateObject var router: Router
     
     @StateObject var gmDashBoardViewModel: GamificationDashboardViewModel
     
-    init(router: Router) {
-        self.router = router
+    var onDismiss: (() -> Void)?
+    
+    init(onDismiss: (() -> Void)? = nil) {
+        let routerInstance = Router()
+        _router = StateObject(wrappedValue: routerInstance)
         _gmDashBoardViewModel = StateObject(
-            wrappedValue: GamificationDashboardViewModel(router: router)
+            wrappedValue: GamificationDashboardViewModel(router: routerInstance)
         )
+        self.onDismiss = onDismiss
     }
     
     var body: some View {
@@ -51,7 +55,7 @@ struct GamificationDashBoardView: View {
         ZStack {
             GamificationDashboardBackgroundView()
             GamificationDashboardClubClanInfoView(router: router)
-            GamificationDashboardNavControlView()
+            GamificationDashboardNavControlView(onDismiss: onDismiss)
             GamificationDashboardProfileItemsView(router: router)
             GamificationDashboardScoreView(score: gmDashBoardViewModel.myRankingResponseModel?.totalPoint)
             GamificationDashboardCentralMenuItemDeck(onAction: gmDashBoardViewModel.presentPopupView(_:))

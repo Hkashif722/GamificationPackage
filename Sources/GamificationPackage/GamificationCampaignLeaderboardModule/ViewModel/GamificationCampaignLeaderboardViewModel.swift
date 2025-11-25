@@ -19,8 +19,12 @@ internal final class GamificationCampaignLeaderboardViewModel: BaseRoutableNavMo
     
     //MARK: Computed Properties
     
-    var campaignUserDataMode: GamificationCampaignLeaderboardDataModel.CampaignLeaderboardSingleUserData? {
+    var campaignUserDataModel: GamificationCampaignLeaderboardDataModel.CampaignLeaderboardSingleUserData? {
         currentCampaignLeaderboard?.aPIGetCampaignLeaderboardSingleUserData
+    }
+    
+    var campaignLeaderboardModel: [GamificationCampaignLeaderboardDataModel.CampaignLeaderboardData] {
+        currentCampaignLeaderboard?.aPIGetCampaignLeaderboardData ?? []
     }
     
     var hasPrevious: Bool {

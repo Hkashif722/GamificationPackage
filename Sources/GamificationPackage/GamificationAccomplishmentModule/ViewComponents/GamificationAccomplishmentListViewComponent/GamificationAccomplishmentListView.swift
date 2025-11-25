@@ -34,7 +34,7 @@ struct GamificationAccomplishmentListView: View {
                 }
             }
         }
-        .versionedContentMargins()
+        .versionedHorizontalBottomContentMargins()
         .applyScrollBounceBehavior()
     }
 }

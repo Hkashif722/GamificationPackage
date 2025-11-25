@@ -57,7 +57,7 @@ internal struct GamificationDashboardClubClanInfoView: View {
     private var clanClubNameBackhroundView: some View {
         Image(.clanClubBg)
             .resizable()
-            .frame(width: 250, height: 45)
+            .frame(width: 270, height: 45)
     }
     
     private var clubNameView: some View {

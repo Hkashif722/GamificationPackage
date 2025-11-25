@@ -49,6 +49,7 @@ struct GamificationHouseChartView: View {
         }
         .frame(maxWidth: 480)
         .background { backgroundFrostView }
+        .gradientBorder()
         .padding(.vertical, 30)
     }
     

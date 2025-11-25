@@ -11,7 +11,7 @@ public struct GamificationPackage : Sendable {
         await GamificationAPIManager.shared.configure(config)
     }
 
-    @MainActor public func dashboard() -> some View {
-        GamificationDashBoardView(router: Router())
+    @MainActor public func dashboard(onDismiss: (() -> Void)? = nil) -> some View {
+        GamificationDashBoardView(onDismiss: onDismiss)
     }
 }

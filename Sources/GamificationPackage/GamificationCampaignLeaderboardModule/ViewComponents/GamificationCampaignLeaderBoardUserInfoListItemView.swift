@@ -11,7 +11,7 @@ import SwiftUI
 struct GamificationCampaignLeaderBoardUserInfoListItemView: View {
     
     let index: Int
-//    let rank: GamificationDashboardDataModel.LeaderBoardResponseModel.Ranking
+    let campaignLeaderboardModel: GamificationCampaignLeaderboardDataModel.CampaignLeaderboardData
     
     var body: some View {
         HStack(spacing: 16) {
@@ -38,20 +38,24 @@ struct GamificationCampaignLeaderBoardUserInfoListItemView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
     private var profilePictureView: some View {
-        SwiftUIUtility.ProfileImageView(imageUrl: URL(string: ""), size: 25, profileBorderColor: .white)
-            .appFont(.poppinsRegular, size: 14)
-            .frame(width: 40, alignment: .leading)
+        SwiftUIUtility.ProfileImageView(
+            imageUrl: campaignLeaderboardModel.computedUseProlePictureURL,
+            size: 25,
+            profileBorderColor: .white
+        )
+        .appFont(.poppinsRegular, size: 14)
+        .frame(width: 40, alignment: .leading)
     }
     
     private var userNameView: some View {
-        Text("Kashif")
+        Text(campaignLeaderboardModel.userName ?? "")
             .appFont(.poppinsRegular, size: 14)
             .frame(alignment: .leading)
     }
     
     
     private var userPointView: some View {
-        Text("12500")
+        Text("\(campaignLeaderboardModel.campaignRewardPoints ?? 0)")
         .appFont(.poppinsSemiBold, size: 14)
         .foregroundColor(.white)
     }
@@ -60,7 +64,7 @@ struct GamificationCampaignLeaderBoardUserInfoListItemView: View {
 #Preview {
     GamificationCampaignLeaderBoardUserInfoListItemView(
         index: 1,
-//        rank: .preview
+        campaignLeaderboardModel: GamificationCampaignLeaderboardDataModel.previewCampaignLeaderboardData[0],
     )
     .background(Color.black)
 }

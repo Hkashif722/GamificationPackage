@@ -54,6 +54,7 @@ struct GamificationCampaignView: View {
                 )
             }
             .background { backgroundFrostView }
+            .gradientBorder()
         }
         .frame(maxWidth: 480)
         .padding(.vertical, 20)

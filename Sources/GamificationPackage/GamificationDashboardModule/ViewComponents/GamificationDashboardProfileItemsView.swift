@@ -77,7 +77,7 @@ internal struct GamificationDashboardProfileItemsView: View {
             Text(userName)
             .appFont(.poppinsBold, size: 12.4, weight: .bold)
                 .foregroundStyle(.white)
-                .padding(.init(top: 8, leading: 58, bottom: 8, trailing: 25))
+                .padding(.init(top: 8, leading: 60, bottom: 8, trailing: 25))
                 .background(ColorUtility.primaryColor)
                 .clipShape(Capsule())
         }

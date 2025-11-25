@@ -67,23 +67,33 @@ extension GamificationCampaignLeaderboardDataModel {
         let aPIGetCampaignLeaderboardSingleUserData: CampaignLeaderboardSingleUserData
         let aPIGetCampaignLeaderboardData: [CampaignLeaderboardData]
     }
-    
+
     struct CampaignLeaderboardSingleUserData: Codable {
-        let userMasterId: Int
-        let userName: String
-        let campaignRank: Int
-        let campaignId: Int
-        let campaignName: String
-        let startDate: String
-        let endDate: String
-        let campaignRewardPoints: Int
+        let userMasterId: Int?
+        let userName: String?
+        let campaignRank: Int?
+        let campaignId: Int?
+        let campaignName: String?
+        let startDate: String?
+        let endDate: String?
+        let campaignRewardPoints: Int?
     }
-    
-    struct CampaignLeaderboardData: Codable {
+
+    struct CampaignLeaderboardData: Codable , Identifiable {
         let userMasterId: Int
-        let userName: String
-        let campaignRank: Int
-        let campaignRewardPoints: Int
+        let userName: String?
+        let gender: String?
+        let profilePicture: String?
+        let eId: String?
+        let campaignRewardPoints: Int?
+        let campaignRank: Int?
+        
+        
+        var id:Int { self.userMasterId }
+        
+        var computedUseProlePictureURL: URL? {
+            ResourceUtils.getResourceURLPath(self.profilePicture)
+        }
     }
 }
 
@@ -110,32 +120,47 @@ extension GamificationCampaignLeaderboardDataModel {
         CampaignLeaderboardData(
             userMasterId: 8973,
             userName: "kashif",
-            campaignRank: 1,
-            campaignRewardPoints: 150
+            gender: "Male",
+            profilePicture: "profilePicture/male/m2.png",
+            eId: "5MuV9uilMng5813CFFEKlA==",
+            campaignRewardPoints: 150,
+            campaignRank: 1
         ),
         CampaignLeaderboardData(
             userMasterId: 8974,
             userName: "john_doe",
-            campaignRank: 2,
-            campaignRewardPoints: 120
+            gender: "Male",
+            profilePicture: "profilePicture/male/m1.png",
+            eId: "6NvW0vjmNoh6924DGGFLmB==",
+            campaignRewardPoints: 120,
+            campaignRank: 2
         ),
         CampaignLeaderboardData(
             userMasterId: 8975,
             userName: "jane_smith",
-            campaignRank: 3,
-            campaignRewardPoints: 100
+            gender: "Female",
+            profilePicture: "profilePicture/female/f1.png",
+            eId: "7OwX1wknOpi7035EHHGMnC==",
+            campaignRewardPoints: 100,
+            campaignRank: 3
         ),
         CampaignLeaderboardData(
             userMasterId: 8976,
             userName: "alex_jones",
-            campaignRank: 4,
-            campaignRewardPoints: 85
+            gender: "Male",
+            profilePicture: "profilePicture/male/m3.png",
+            eId: "8PxY2xloPqj8146FIIHNoD==",
+            campaignRewardPoints: 85,
+            campaignRank: 4
         ),
         CampaignLeaderboardData(
             userMasterId: 8977,
             userName: "sarah_wilson",
-            campaignRank: 5,
-            campaignRewardPoints: 70
+            gender: "Female",
+            profilePicture: "profilePicture/female/f2.png",
+            eId: "9QyZ3ymqQrk9257GJJIOpE==",
+            campaignRewardPoints: 70,
+            campaignRank: 5
         )
     ]
     

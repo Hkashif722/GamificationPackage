@@ -9,22 +9,25 @@
 import SwiftUI
 import Combine
 
+@MainActor
 class BaseRoutableNavModel: ObservableObject {
     
     // Every ViewModel gets the router injected
     internal let router: Router
+    
+    // Event publisher reference
+    let eventPublisher = GamificationEventPublisher.shared
 
     init(router: Router) {
         self.router = router
     }
 
     // Forward router operations
-    @MainActor
+
     func presentPopup(_ route: Route) {
         router.presentPopup(route)
     }
 
-    @MainActor
     func dismissPopup() {
         router.dismissPopup()
     }

@@ -23,6 +23,7 @@ struct GamificationMissionTypeCardListView: View {
         .background {
             backgroundFrostView
         }
+        .gradientBorder()
     }
     
     

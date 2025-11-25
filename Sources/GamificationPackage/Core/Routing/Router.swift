@@ -9,7 +9,7 @@
 import SwiftUI
 import Combine
 
-final class Router: ObservableObject {
+internal final class Router: ObservableObject {
     @Published var popup: Route?
 
     @MainActor

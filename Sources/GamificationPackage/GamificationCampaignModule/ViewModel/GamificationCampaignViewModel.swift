@@ -128,8 +128,8 @@ extension GamificationCampaignViewModel {
     
     func onCourseClick(_ course: GamificationDashboardDataModel.GroupedCampaign.Course) {
         // Handle course click - navigate to course detail or start course
-        // TODO: Implement navigation logic
-        print("Course clicked: \(course.title) (ID: \(course.id))")
+        eventPublisher.publish(.launchCourse(course.id))
+        Logger.shared.log(.info, message:"Course clicked: \(course.title) (ID: \(course.id))" )
     }
 }
 

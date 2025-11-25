@@ -11,7 +11,7 @@ import SwiftUI
 struct GamificationMissionGridItemView: View {
     
     let course: GamificationMissionTypeDataModel.Course
-    let onClick: () -> ()
+    let onLaunchMission: (_ mission: GamificationMissionTypeDataModel.Course) -> ()
     
     var body: some View {
         
@@ -21,10 +21,7 @@ struct GamificationMissionGridItemView: View {
         }
         .padding()
         .background { backgroundFrostView }
-        .overlay {
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(.white, lineWidth: 2)
-        }
+        .gradientBorder()
         .minimumScaleFactor(0.2)
     }
     
@@ -103,7 +100,7 @@ struct GamificationMissionGridItemView: View {
             borderColor: Color(hex: "#06C2C4"),
             height: 25,
             font: .callout,
-            action: onClick
+            action: { onLaunchMission(course) }
         )
         .frame(width: 65)
     }
@@ -122,7 +119,36 @@ struct GamificationMissionGridItemView: View {
             .blur(radius: 4)
         GamificationMissionGridItemView(
             course: GamificationMissionTypeDataModel.PreviewData.sampleCourse,
-            onClick: {}
+            onLaunchMission: { _ in }
         )
     }
 }
+
+
+struct TopOnlyRoundedBorder: Shape {
+    var radius: CGFloat = 20
+
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+
+        path.move(to: CGPoint(x: 0, y: radius))
+
+        // top-leading curve
+        path.addQuadCurve(
+            to: CGPoint(x: radius, y: 0),
+            control: CGPoint(x: 0, y: 0)
+        )
+
+        // top straight line
+        path.addLine(to: CGPoint(x: rect.width - radius, y: 0))
+
+        // top-trailing curve
+        path.addQuadCurve(
+            to: CGPoint(x: rect.width, y: radius),
+            control: CGPoint(x: rect.width, y: 0)
+        )
+
+        return path
+    }
+}
+

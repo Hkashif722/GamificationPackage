@@ -43,5 +43,17 @@ extension GamificationCriticalMissionViewModel {
 }
 
 
+//MARK: Handle Event
+extension GamificationCriticalMissionViewModel {
+    
+    func handeTodoLaunch(_ todo: GamificationCriticalMissionDataModel.TODOResponseModel) {
+        eventPublisher.publish(.launchTodo(id: todo.id, type: todo.type ?? ""))
+    }
+    
+    func handleSeeAll() {
+        eventPublisher.publish(.launchAllTodo)
+    }
+}
+
 
 

@@ -154,7 +154,7 @@ extension GamificationMissionTypeDataModel {
 //MARK: Response Model
 extension GamificationMissionTypeDataModel {
     
-    struct Course: Codable, Identifiable, Hashable {
+    public struct Course: Codable, Identifiable, Hashable {
         let courseId: Int
         let title: String
         let mission: String?

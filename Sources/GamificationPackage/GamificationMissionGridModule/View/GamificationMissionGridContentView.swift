@@ -42,8 +42,11 @@ struct GamificationMissionGridContentView: View {
     
     private var gamificationMissionGridContentView: some View {
         VStack(spacing: 8) {
-//            messionTitleView
-            GamificationMissionGridView(courses: missionGridViewModel.currentPageCourses)
+            //            messionTitleView
+            GamificationMissionGridView(
+                courses: missionGridViewModel.currentPageCourses,
+                onLaunchMission: missionGridViewModel.handleMissionLaunch(_:)
+            )
             
         }
         .padding(.init(top: 40, leading: 10, bottom: 0, trailing: 25))

@@ -11,6 +11,8 @@ struct GamificationMissionGridView: View {
     
     let courses: [GamificationMissionTypeDataModel.Course]
     
+    let onLaunchMission: (_ mission: GamificationMissionTypeDataModel.Course) -> ()
+    
     
     var body: some View {
         
@@ -19,7 +21,10 @@ struct GamificationMissionGridView: View {
             minimumWidth: 300,
             
         ) { item in
-            GamificationMissionGridItemView(course: item, onClick: {})
+            GamificationMissionGridItemView(
+                course: item,
+                onLaunchMission: onLaunchMission
+            )
         }
     }
     
@@ -30,7 +35,8 @@ struct GamificationMissionGridView: View {
         GamificationDashboardBackgroundView()
             .blur(radius: 4)
         GamificationMissionGridView(
-            courses: GamificationMissionTypeDataModel.PreviewData.sampleCourses
+            courses: GamificationMissionTypeDataModel.PreviewData.sampleCourses,
+            onLaunchMission: { _ in }
         )
     }
 }

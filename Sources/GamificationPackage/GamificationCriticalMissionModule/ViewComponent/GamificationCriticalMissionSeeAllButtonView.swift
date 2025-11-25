@@ -30,7 +30,7 @@ internal struct GamificationCriticalMissionSeeAllButtonView: View {
             foregroundColor: .white,
             borderColor: Color(hex: "#06C2C4"),
             height: 35,
-            action: { }
+            action: didSelectSeeAll
         )
         .frame(width: 150, height: 35)
     }

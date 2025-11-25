@@ -36,7 +36,7 @@ internal struct GamificationMisionCardStackingItemView: View {
         .background { backgroundFrostView }
         .overlay {
             RoundedRectangle(cornerRadius: 20)
-                .stroke(.white, lineWidth: 2)
+                .stroke(.white, lineWidth: 0.5)
         }
         
     }

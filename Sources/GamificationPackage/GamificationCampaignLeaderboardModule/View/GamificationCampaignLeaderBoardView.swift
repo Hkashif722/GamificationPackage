@@ -42,20 +42,23 @@ struct GamificationCampaignLeaderBoardView: View {
             campaignLeaderBoardTitleView
             VStack(spacing: 4) {
                 GamificationCampaignLeaderBoardHeaderProfileInfoView(
-                    campaignLeaderUserData: campaignLeaderboardViewModel.campaignUserDataMode
+                    campaignLeaderUserData: campaignLeaderboardViewModel.campaignUserDataModel
                 )
                 GamificationCampaignLeaderBoardHeaderControlView(
-                    campaignLeaderUserData: campaignLeaderboardViewModel.campaignUserDataMode,
+                    campaignLeaderUserData: campaignLeaderboardViewModel.campaignUserDataModel,
                     hasPrevious: campaignLeaderboardViewModel.hasPrevious,
                     hasNext: campaignLeaderboardViewModel.hasNext,
                     onPreviousClick:campaignLeaderboardViewModel.goToPreviousCampaign,
                     onNextClick: campaignLeaderboardViewModel.goToNextCampaign
                 )
                 SwiftUIUtility.GradientDivider()
-                GamificationCampaignLeaderBoardUserInfoListView()
+                GamificationCampaignLeaderBoardUserInfoListView(
+                    campaignLeaderboardModel: campaignLeaderboardViewModel.campaignLeaderboardModel
+                )
             }
             .padding()
             .background { backgroundFrostView }
+            .gradientBorder()
         }
         .frame(maxWidth: 600)
         .padding(.vertical, 20)

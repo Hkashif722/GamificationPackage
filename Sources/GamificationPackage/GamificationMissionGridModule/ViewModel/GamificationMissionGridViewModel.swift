@@ -82,3 +82,11 @@ extension GamificationMissionGridViewModel {
     }
 }
 
+
+//MARK: Handle Event
+extension GamificationMissionGridViewModel {
+    
+    func handleMissionLaunch (_ mission: GamificationMissionTypeDataModel.Course) {
+        eventPublisher.publish(.launchCourse(mission.courseId))
+    }
+}

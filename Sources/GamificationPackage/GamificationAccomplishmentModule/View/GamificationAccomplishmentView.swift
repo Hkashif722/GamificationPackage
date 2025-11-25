@@ -37,7 +37,7 @@ struct GamificationAccomplishmentView: View {
     }
     
     private var gamificationAccomplishmentView: some View {
-        VStack {
+        VStack(spacing: 0) {
             GamificationAccomplishmentHeaderView(
                 myRankingModel: accomplishmentViewModel.navModel.myRankingModel
             )
@@ -45,6 +45,7 @@ struct GamificationAccomplishmentView: View {
         }
         .frame(maxWidth: 480)
         .background { backgroundFrostView }
+        .gradientBorder()
         .padding(.vertical, 30)
     }
     

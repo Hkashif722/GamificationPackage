@@ -13,9 +13,12 @@ internal struct GamificationLeaderboardTitleView: View {
     let myRanking: GamificationDashboardDataModel.LeaderBoardResponseModel.Ranking?
     
     var body: some View {
-        HStack(alignment: .top, spacing: 16) {
-            headerTitleView
+        ZStack(alignment: .trailing) {
             userProfileInfoView
+            ZStack {
+                headerTitleView
+            }
+            .frame(width: 450)
         }
     }
     

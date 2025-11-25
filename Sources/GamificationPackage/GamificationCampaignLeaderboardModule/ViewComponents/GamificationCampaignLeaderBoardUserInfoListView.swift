@@ -10,7 +10,7 @@ import SwiftUI
 
 struct GamificationCampaignLeaderBoardUserInfoListView: View {
     
-//    let topRanking: [GamificationDashboardDataModel.LeaderBoardResponseModel.Ranking]
+    let campaignLeaderboardModel: [GamificationCampaignLeaderboardDataModel.CampaignLeaderboardData]
     
     var body: some View {
         gamificationLeaderboardUserInfoListView
@@ -18,8 +18,8 @@ struct GamificationCampaignLeaderBoardUserInfoListView: View {
     
     private var gamificationLeaderboardUserInfoListView: some View {
         ScrollView {
-            ForEach(0..<10) { index in
-                GamificationCampaignLeaderBoardUserInfoListItemView(index: index + 1)
+            ForEach(Array(campaignLeaderboardModel.enumerated()), id: \.offset) { index, model in
+                GamificationCampaignLeaderBoardUserInfoListItemView(index: index, campaignLeaderboardModel: model)
             }
         }
         .versionedContentMargins()
@@ -36,7 +36,9 @@ struct GamificationCampaignLeaderBoardUserInfoListView_Preview: View{
         ZStack {
             GamificationDashboardBackgroundView()
                 .blur(radius: 4)
-            GamificationCampaignLeaderBoardUserInfoListView()
+            GamificationCampaignLeaderBoardUserInfoListView(
+                campaignLeaderboardModel: GamificationCampaignLeaderboardDataModel.previewCampaignLeaderboardData
+            )
         }
     }
 }

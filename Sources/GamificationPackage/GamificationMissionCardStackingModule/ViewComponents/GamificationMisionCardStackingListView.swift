@@ -12,13 +12,13 @@ struct GamificationMisionCardStackingListView: View {
     
     let mission: GamificationMissionTypeDataModel.MissionTypeProgressEnum
     
-    let onClickLaunch:( (_ mission: GamificationMissionTypeDataModel.MissionTypeProgressEnum) -> ())
+    let onClickLaunch:( (_ course: GamificationMissionTypeDataModel.Course) -> ())
 
     @State private var index = 1
     
     init(
         mission: GamificationMissionTypeDataModel.MissionTypeProgressEnum,
-        onClickLaunch: @escaping (_ mission: GamificationMissionTypeDataModel.MissionTypeProgressEnum) -> ()
+        onClickLaunch: @escaping (_ mission: GamificationMissionTypeDataModel.Course) -> ()
     ) {
         self.mission = mission
         self.onClickLaunch = onClickLaunch
@@ -47,7 +47,7 @@ struct GamificationMisionCardStackingListView: View {
                     GamificationMisionCardStackingItemView(
                         missionType: mission.rawValue,
                         course: course,
-                        onClick: { onClickLaunch(mission) }
+                        onClick: { onClickLaunch(course) }
                     )
                 }
             }
@@ -110,8 +110,8 @@ extension GamificationMisionCardStackingListView {
                 ),
                 courses: GamificationMissionTypeDataModel.PreviewData.sampleCourses
             ),
-            onClickLaunch: { mission in
-                print("Launched mission: \(mission.rawValue)")
+            onClickLaunch: { course in
+                print("Launched mission: \(course.id)")
             }
         )
     }

@@ -24,8 +24,8 @@ internal final class GamificationMissionCardViewModel: BaseRoutableNavModel {
 //MARK: Handle Event
 internal extension GamificationMissionCardViewModel {
     
-    func handleOnLaunchMission(_ mission: GamificationMissionTypeDataModel.MissionTypeProgressEnum) {
-        
+    func handleOnLaunchMission(_ course: GamificationMissionTypeDataModel.Course) {
+        eventPublisher.publish(.launchCourse(course.courseId))
     }
     
     func handleViewAll() {

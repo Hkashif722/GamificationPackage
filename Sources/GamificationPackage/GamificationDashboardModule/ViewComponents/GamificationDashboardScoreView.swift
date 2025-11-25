@@ -30,13 +30,13 @@ internal struct GamificationDashboardScoreView: View {
         Image("gm_db_points_bg", bundle: .module)
             .resizable()
             .scaledToFit()
-            .frame(width: 200)
+            .frame(width: 180)
         
     }
     
     
     private var scoreView: some View {
-        VStack(spacing: 2) {
+        VStack(spacing: -2) {
             scoreLableView
             scoreInfoView
         }

@@ -39,8 +39,8 @@ internal struct GamificationCriticalMissionView: View {
             messionTitleView
             GamificationCriticalMissionListView(
                 todosModel: criticalMissionViewModel.criticalMissions,
-                didSelectViewClub: {},
-                didSelectSeeAll: {}
+                onLaunchTodo: criticalMissionViewModel.handeTodoLaunch(_:),
+                didSelectSeeAll: criticalMissionViewModel.handleSeeAll
             )
         }
         
