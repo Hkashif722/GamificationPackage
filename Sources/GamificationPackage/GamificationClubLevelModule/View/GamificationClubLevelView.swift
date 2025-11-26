@@ -50,7 +50,8 @@ internal struct GamificationClubLevelView: View {
         GamificationClubLevelItemView(
             gamificationClubTypeModel: gamificationClubLevelViewModel.gamificationClubTypeModel,
             clubType: club,
-            isClubLocked: club == gamificationClubLevelViewModel.selectedClub
+            isClubLocked: club == gamificationClubLevelViewModel.selectedClub,
+            onViewClub: gamificationClubLevelViewModel.handleViewCLub(_:)
         )
         .shadow(
             color: gamificationClubLevelViewModel.selectedClub == club

@@ -88,7 +88,7 @@ internal extension GamificationDashboardViewModel {
             configuredColumnName: "undefined",
             configuredColumnValue: "",
             houseCode: nil,
-            ranks: 100
+            ranks: 10
         )
         let endpoint = GamificationDashboardDataModel.Endpoint.leaderboard(payload: payload)
         return try await ApiService.shared.requestPostHeader(
@@ -163,7 +163,7 @@ internal extension GamificationDashboardViewModel {
 internal extension GamificationDashboardViewModel {
     private func handleRankingResponse(_ response: GamificationDashboardDataModel.LeaderBoardResponseModel.RankingResponse) {
         myRankingResponseModel = response.myRanking?.first
-        topRankingResponseModel = response.topRanking
+        topRankingResponseModel = Array(response.topRanking.dropFirst(3))
     }
 }
 

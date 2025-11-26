@@ -17,6 +17,8 @@ struct GamificationClubLevelItemView: View {
     let clubType: GamificationClubTypeDataModel.ClubType
     
     let isClubLocked: Bool
+    
+    let onViewClub: (_ clubType: GamificationClubTypeDataModel.ClubType) -> ()
 
     
     var body: some View {
@@ -100,7 +102,7 @@ struct GamificationClubLevelItemView: View {
     
     private var viewClubButtonView: some View {
         
-        Button(action: {}) {
+        Button(action: {onViewClub(clubType)}) {
             
             Image("gm_view_club_btn_bg", bundle: .module)
                 .resizable()
@@ -133,6 +135,7 @@ struct GamificationClubLevelItemView: View {
     GamificationClubLevelItemView(
         gamificationClubTypeModel: .shared,
         clubType: .master,
-        isClubLocked: true
+        isClubLocked: true,
+        onViewClub: { _ in }
     )
 }

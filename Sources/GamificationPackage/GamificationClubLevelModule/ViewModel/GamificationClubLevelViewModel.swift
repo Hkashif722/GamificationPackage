@@ -37,3 +37,16 @@ internal final class GamificationClubLevelViewModel: BaseRoutableNavModel {
         super.init(router: router)
     }
 }
+
+//MARK: Hanlde Navigation
+extension GamificationClubLevelViewModel {
+    
+    func handleViewCLub(_ clubType: GamificationClubTypeDataModel.ClubType) {
+        
+        GamificationClubTypeDataModel.shared.clubType = clubType
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+            self?.dismissPopup()
+        }
+    }
+}

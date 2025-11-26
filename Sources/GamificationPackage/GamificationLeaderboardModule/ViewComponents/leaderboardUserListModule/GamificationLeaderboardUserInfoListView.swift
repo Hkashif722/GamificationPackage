@@ -19,7 +19,7 @@ struct GamificationLeaderboardUserInfoListView: View {
     private var gamificationLeaderboardUserInfoListView: some View {
         ScrollView {
             ForEach(Array(topRanking.enumerated()), id: \.element.id) { index, rank in
-                GamificationLeaderboardUserInfoListItemView(index: index + 1, rank: rank)
+                GamificationLeaderboardUserInfoListItemView(index: index + 4, rank: rank)
             }
         }
         .versionedContentMargins()
