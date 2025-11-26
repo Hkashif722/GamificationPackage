@@ -13,15 +13,18 @@ struct GamificationDailyLoginBonusPointView: View {
     
     init(router: Router) {
         self.router = router
-        FontRegistrar.registerAllFonts()
     }
     
     var body: some View {
-        ZStack {
-            bonusBackgroundView
-                .overlay(alignment: .topTrailing) {
-                    closeButtonView
-                }
+        ZStack(alignment: .topTrailing) {
+            
+            ZStack {
+                bonusBackgroundView
+            }
+            .fullSize()
+            .ignoresSafeArea()
+            
+            closeButtonView
         }
     }
     
@@ -34,9 +37,14 @@ struct GamificationDailyLoginBonusPointView: View {
     }
     
     private var cardInfoView: some View {
-        VStack {
-            dailyLoginTextView
-            bonusTextView
+        ZStack(alignment: .bottom) {
+            VStack {
+                dailyLoginTextView
+                bonusTextView
+            }
+            
+            bottomInfoVew
+                .offset(y: 25)
         }
     }
     private var dailyLoginTextView: some View {
@@ -67,6 +75,22 @@ struct GamificationDailyLoginBonusPointView: View {
     }
 }
 
+
+struct GamificationDailyLoginBonusPointView_Preview: View {
+    
+    init() {
+        FontRegistrar.registerAllFonts()
+    }
+    
+    var body: some View {
+        ZStack {
+            GamificationDashboardBackgroundView()
+                .blur(radius: 4)
+            GamificationDailyLoginBonusPointView(router: Router())
+        }
+    }
+}
+
 #Preview {
-    GamificationDailyLoginBonusPointView(router: Router())
+    GamificationDailyLoginBonusPointView_Preview()
 }

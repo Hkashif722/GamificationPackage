@@ -243,6 +243,8 @@ internal extension GamificationDashboardViewModel {
             )
             GamificationAccomplishmentView(router: self.router, navModel: navModel)
             
+        case .dailyLoginBonus:
+            GamificationDailyLoginBonusPointView(router: self.router)
         default:
             GamificationMissionCardStackingView(router: self.router, mission: .bossMission(model: .default, courses: []))
         }
